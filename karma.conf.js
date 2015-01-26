@@ -19,8 +19,7 @@ module.exports = function(config) {
       {pattern: 'node_modules/unexpected/*.js', included: false},
       {pattern: 'node_modules/array.prototype.*/index.js', included: true},
       {pattern: 'node_modules/polyfill-function-prototype-bind/*.js', included: false},
-      {pattern: 'src/*.js', included: false},
-      {pattern: 'tests/*.js', included: false},
+      {pattern: 'src/**/*.js', included: false}
     ],
 
 
@@ -55,7 +54,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: true,
+    autoWatch: false,
 
 
     // start these browsers

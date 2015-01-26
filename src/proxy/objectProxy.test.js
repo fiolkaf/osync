@@ -1,5 +1,5 @@
 define(function(require) {
-    var ObjectProxy = require('src/objectProxy');
+    var ObjectProxy = require('src/proxy/objectProxy');
     var expect = require('unexpected');
 
     describe('ObjectProxy', function() {
@@ -51,32 +51,6 @@ define(function(require) {
             });
         });
 
-        describe('nested object', function() {
-            it('can create proxy on nested objects', function() {
-                var obj = {
-                    object1: {property1: 0}
-                };
-                var proxy = new ObjectProxy(obj);
-                expect(obj.object1.property1, 'to be defined');
-            });
-            it('can assign values to the nested object properties', function() {
-                var obj = {
-                    object1: {property1: 0}
-                };
-                var proxy = new ObjectProxy(obj);
-                proxy.object1.property1 = 1;
-                expect(obj.object1.property1, 'to equal', 1);
-            });
-            it('changes proxy nested property', function() {
-                var obj = {
-                    object1: {property1: 0}
-                };
-                var proxy = new ObjectProxy(obj);
-                obj.object1.property1 = 1;
-                expect(proxy.object1.property1, 'to equal', 1);
-            });
-        });
-
         describe('array', function() {
             it('can set the value of a source array property', function() {
                 var obj = {
@@ -93,6 +67,21 @@ define(function(require) {
                 var proxy = new ObjectProxy(obj);
                 proxy.arr1 = [1];
                 expect(obj.arr1, 'to equal', [1]);
+            });
+        });
+
+        describe('subscriptions', function() {
+            it('triggers an event when modifying plain property', function() {
+                var obj = {
+                    prop: 2
+                };
+                var result = {};
+                var proxy = new ObjectProxy(obj);
+                proxy.on('change', function(key, value) {
+                    result[key] = value;
+                });
+                proxy.prop = 3;
+                expect(result.prop, 'to equal', 3);
             });
         });
     });
