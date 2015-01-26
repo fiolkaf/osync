@@ -17,7 +17,9 @@ module.exports = function(config) {
     files: [
       'test-config/test-main.js',
       {pattern: 'node_modules/unexpected/*.js', included: false},
+      {pattern: 'node_modules/array.prototype.*/index.js', included: true},
       {pattern: 'node_modules/polyfill-function-prototype-bind/*.js', included: false},
+      {pattern: 'src/*.js', included: false},
       {pattern: 'tests/*.js', included: false},
     ],
 
