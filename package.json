@@ -37,5 +37,8 @@
     "requirejs": "^2.1.15",
     "unexpected": "^5.7.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "array.prototype.findindex": "^1.0.0",
+    "bussi": "0.0.1"
+  }
 }
