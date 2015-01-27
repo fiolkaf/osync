@@ -42,7 +42,7 @@ define(function(require) {
             });
             it('can subscribe to its own array property changes', function() {
                 var obj = {
-                    array1: [1, 2, 3, 4],
+                    array1: [1, 2, 3, 4]
                 };
                 var observable = new ObservableObject(obj);
                 var result = {};
@@ -65,7 +65,7 @@ define(function(require) {
                 expect(result.id, 'to equal', 2);
             });
         });
-        describe('hierarchical simple object subscribe', function() {
+        describe('hierarchical simple object subscription', function() {
             it('receives events about nested property changes - 2 levels', function() {
                 var obj = {
                     property1: {
@@ -97,7 +97,7 @@ define(function(require) {
                 expect(result['property1.property2.property3'], 'to equal', 2);
             });
         });
-        describe('hierarchical complex type object subscribe', function() {
+        describe('hierarchical complex object subscription', function() {
             it('receives events about nested object changes - 2 levels', function() {
                 var obj = {
                     property1: {
@@ -161,7 +161,7 @@ define(function(require) {
                 });
             });
         });
-        describe('array subscribtion', function() {
+        describe('array subscription', function() {
             it('receives events about array property changes', function() {
                 var obj = {
                     array: []
@@ -218,6 +218,32 @@ define(function(require) {
                 });
                 observable.array[0].array[0].id = 1;
                 expect(result['array[0].array[0].id'], 'to equal', 1);
+            });
+            it('receives events about new object assignment', function() {
+                var obj = {
+                    array: [ {id: 2}]
+                };
+                var observable = new ObservableObject(obj);
+                var result = {};
+                observable.on('change', function(key, value) {
+                    result[key] = value;
+                });
+                obj.array[0] = {id: 3};
+                expect(result['array[0]'], 'to equal', {id: 3});
+            });
+            it('receives events about nested object assignment', function() {
+                var obj = {
+                    array: [
+                        { array: [{id: 2}] }
+                    ]
+                };
+                var observable = new ObservableObject(obj);
+                var result = {};
+                observable.on('change', function(key, value) {
+                    result[key] = value;
+                });
+                obj.array[0].array[0] = {id: 3};
+                expect(result['array[0].array[0]'], 'to equal', {id: 3});
             });
         });
     });

@@ -9,30 +9,53 @@ define(function(require) {
      *
      * @param array {Array} Source array
      */
-    var ArrayProxy = function(array) {
+    return function ArrayProxy(array) {
+        var proxyArray = array.slice(0);
+        var trigger = Observable.mixin(proxyArray);
 
-        var trigger = Observable.mixin(array);
+        function redefineSetters(proxyArray) {
+            proxyArray.forEach(function(value, index) {
+                delete proxyArray[index];
+            });
+            // Foreach index proxy setter
+            array.forEach(function(value, index) {
+                Object.defineProperty(proxyArray, index, {
+                    configurable: true,
+                    get: function() {
+                        return array[index];
+                    },
+                    set: function(value) {
+                        array[index] = value;
+                        trigger('change', index, value);
+                    }
+                });
+            });
+        }
 
         function proxy(method) {
             var args = Array.prototype.slice.call(arguments, 1);
+            // DO not reverse and sort proxy as those already work on indexers
+            if (['reverse', 'sort'].indexOf(method) < 0) {
+                Array.prototype[method].apply(proxyArray, args);
+            }
             var result = Array.prototype[method].apply(array, args);
             if (['pop', 'shift'].indexOf(method) >= 0) {
                 trigger('change', method, result);
             } else {
                 trigger('change', method, args);
             }
+            redefineSetters(proxyArray);
 
             return result;
         }
 
+        // Proxy modify methods on array
         ['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'].forEach(function(method) {
-            Object.defineProperty(array, method, {
+            Object.defineProperty(proxyArray, method, {
                 value: proxy.bind(null, method)
             });
         });
-
-        return array;
+        redefineSetters(proxyArray);
+        return proxyArray;
     };
-
-    return ArrayProxy;
 });

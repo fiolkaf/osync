@@ -45,14 +45,16 @@ define(function(require) {
             var value = data[key];
             if (Array.isArray(value)) {
                 var arrayProxy = new ObservableArray(value);
-                arrayProxy.on('change', function(type, value) {
+                arrayProxy.on('change', function(subKey, value) {
                     var args;
-                    if (typeof value === 'object') { // Array method modifications
-                        args = ['change', key, { type: type, value: value }];
-                    } else { // Property modifications
+                    if (typeof subKey === 'number') { // Indexer assignment
                         args = Array.prototype.slice.call(arguments, 1);
-                        var argumentPath = key +  arguments[0];
-                        args = ['change', argumentPath].concat(args);
+                        args = ['change', key + '[' + subKey + ']'].concat(args);
+                    } else if (subKey.indexOf('.') > -1) { // Nested properties
+                        args = Array.prototype.slice.call(arguments, 1);
+                        args = ['change', key + arguments[0]].concat(args);
+                    } else { // Array collection modifications
+                        args = ['change', key, { type: subKey, value: value }];
                     }
                     proxy._trigger.apply(this, args);
                 });
