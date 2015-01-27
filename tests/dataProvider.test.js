@@ -1,18 +1,42 @@
 define([], function() {
-    var todoList;
+/*   NSync.createModel('tour', {
+        start: function() {
+            this.tasks.forEach( task => activate);
+        },
+        stop: function() {
+            this.tasks.forEach( task => stop);
+        }
+     });
+     NSync.createLocalStoreAdapter('tour', {
+        [ {
+            name: 'Tour1',
+            tasks: [
+             { uri: '/tasks/0},
+             { uri: '/tasks/1}
+            ]
+          },
+          {
+            name: 'Tour2',
+            tasks: []
+          }
+        ]
+     });
+     NSync.Store('tours');
 
-    NSync.createModel('todo', properties);
-    new NSync.LocalStoreProvider(NSync.Models.Todo);
-    new NSync.Receiver(NSync.Models.Todo).getAll().then(function(model) {
-        todoList = model;
-        todoList.on('change', component.render);
-    });
+     NSync.createModel('task');
+     NSync.createLocalStoreAdapter('task', {
+        [
+            { uri: '/tasks/0, name: 'Show me login'},
+            { uri: '/tasks/1, name: 'Show me logout'},
+        ]
+     });
 
-    component.on('addItem', function() {
-        var model = new Models.Todo({
-            // _uri = /todos/{0}
-        });
-        model.name = 'test';
-        todoList.add(model);
-    })
+     var taskStore = NSync.Store('task');
+     var loginTask = taskStore.get({ id: 'showme-login' });
+     loginTask.active = true;
+
+     loginTask.on('change', function(property, value) {
+        component.render();
+     });
+*/
 });

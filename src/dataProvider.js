@@ -22,7 +22,7 @@ define(['bussi'], function (MessageBus) {
             var result = this._dataAdapter.getAll(type, filter);
             channel.publish('receive/' + type + 's', result);
         });
-    }
+    };
 
     return DataProvider;
 });

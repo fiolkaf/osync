@@ -11,11 +11,9 @@ define(function(require) {
         Object.defineProperty(objectProxy, key, {
             enumerable: true,
             get: function() {
-                console.log('get', propertyPath);
                 return proxyGet ? proxyGet : object[key];
             },
             set: function(value) {
-                console.log('set value', propertyPath, value);
                 if ((typeof value === 'object') && ! Array.isArray(value)) {
                     object[key] = new ObjectProxy(value, propertyPath);
                 }
