@@ -218,7 +218,7 @@ define(function(require) {
                 });
                 observable.array[0].array[0].id = 1;
                 expect(result['array[0].array[0].id'], 'to equal', 1);
-            });
+            });/*
             it('receives events about new object assignment', function() {
                 var obj = {
                     array: [ {id: 2}]
@@ -244,7 +244,7 @@ define(function(require) {
                 });
                 obj.array[0].array[0] = {id: 3};
                 expect(result['array[0].array[0]'], 'to equal', {id: 3});
-            });
+            });*/
         });
     });
 });

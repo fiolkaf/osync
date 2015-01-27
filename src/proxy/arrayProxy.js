@@ -14,9 +14,6 @@ define(function(require) {
         var trigger = Observable.mixin(proxyArray);
 
         function redefineSetters(proxyArray) {
-            proxyArray.forEach(function(value, index) {
-                delete proxyArray[index];
-            });
             // Foreach index proxy setter
             array.forEach(function(value, index) {
                 Object.defineProperty(proxyArray, index, {
@@ -26,6 +23,7 @@ define(function(require) {
                     },
                     set: function(value) {
                         array[index] = value;
+
                         trigger('change', index, value);
                     }
                 });
