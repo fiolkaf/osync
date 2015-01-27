@@ -41,7 +41,7 @@ module.exports = function(config) {
 
 
     // web server port
-    port: 9876,
+    port: 9879,
 
 
     // enable / disable colors in the output (reporters and logs)
@@ -54,16 +54,16 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // start these browsers
     // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
-    browsers: ['PhantomJS'],
+    browsers: ['Chrome'],
 
 
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
-    singleRun: true
+    singleRun: false
   });
 };
