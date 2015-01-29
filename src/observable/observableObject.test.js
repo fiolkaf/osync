@@ -1,5 +1,6 @@
 define(function(require) {
     var expect = require('unexpected');
+
     var ObservableObject = require('./observableObject').ObservableObject;
 
     describe('ObservableObject', function() {
@@ -208,7 +209,9 @@ define(function(require) {
             it('receives events about nested array objects changes', function() {
                 var obj = {
                     array: [{
-                        array: [ {id: 2}]
+                        array: [{
+                            id: 2
+                        }]
                     }]
                 };
                 var observable = new ObservableObject(obj);
@@ -218,33 +221,116 @@ define(function(require) {
                 });
                 observable.array[0].array[0].id = 1;
                 expect(result['array[0].array[0].id'], 'to equal', 1);
-            });/*
-            it('receives events about new object assignment', function() {
-                var obj = {
-                    array: [ {id: 2}]
-                };
-                var observable = new ObservableObject(obj);
-                var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
-                });
-                obj.array[0] = {id: 3};
-                expect(result['array[0]'], 'to equal', {id: 3});
             });
-            it('receives events about nested object assignment', function() {
-                var obj = {
-                    array: [
-                        { array: [{id: 2}] }
-                    ]
-                };
+            /*
+                        it('receives events about new object assignment', function() {
+                            var obj = {
+                                array: [ {id: 2}]
+                            };
+                            var observable = new ObservableObject(obj);
+                            var result = {};
+                            observable.on('change', function(key, value) {
+                                result[key] = value;
+                            });
+                            obj.array[0] = {id: 3};
+                            expect(result['array[0]'], 'to equal', {id: 3});
+                        });
+                        it('receives events about nested object assignment', function() {
+                            var obj = {
+                                array: [
+                                    { array: [{id: 2}] }
+                                ]
+                            };
+                            var observable = new ObservableObject(obj);
+                            var result = {};
+                            observable.on('change', function(key, value) {
+                                result[key] = value;
+                            });
+                            obj.array[0].array[0] = {id: 3};
+                            expect(result['array[0].array[0]'], 'to equal', {id: 3});
+                        });*/
+        });
+        describe('dispose', function() {
+            it('contains dispose method', function() {
+                var obj = {};
                 var observable = new ObservableObject(obj);
                 var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
-                });
-                obj.array[0].array[0] = {id: 3};
-                expect(result['array[0].array[0]'], 'to equal', {id: 3});
-            });*/
+                expect(observable.dispose, 'to be defined');
+            });
+            it('disposes children', function() {
+                var obj = {
+                    obj: {
+                        obj: {}
+                    }
+                };
+                var observable = new ObservableObject(obj);
+                var spy = sinon.spy();
+                obj.obj.obj.addDisposer(spy);
+                observable.dispose();
+                expect(spy.called, 'to be true');
+            });
+            it('disposes array children', function() {
+                var obj = {
+                    obj: {
+                        array: [{}]
+                    }
+                };
+                var observable = new ObservableObject(obj);
+                var spy = sinon.spy();
+                obj.obj.array[0].addDisposer(spy);
+                observable.dispose();
+                expect(spy.called, 'to be true');
+            });
+            it('does not fire "change" event after disposing', function() {
+                var obj = {
+                    property: true
+                };
+                var observable = new ObservableObject(obj);
+                var callback = sinon.spy();
+                observable.on('change', callback);
+                observable.dispose();
+                obj.property = false;
+                expect(callback.called, 'to be false');
+            });
+            it('does not fire "change" event after disposing - 2nd level', function() {
+                var obj = {
+                    object: {
+                        property: true
+                    }
+                };
+                var observable = new ObservableObject(obj);
+                var callback = sinon.spy();
+                observable.on('change', callback);
+                observable.dispose();
+                obj.object.property = false;
+                expect(callback.called, 'to be false');
+            });
+            it('does not fire "change" event after disposing - array methods', function() {
+                var obj = {
+                    object: {
+                        array: []
+                    }
+                };
+                var observable = new ObservableObject(obj);
+                var callback = sinon.spy();
+                observable.on('change', callback);
+                observable.dispose();
+                obj.object.array.push(0);
+                expect(callback.called, 'to be false');
+            });
+            it('does not fire "change" event after disposing - array object assignments', function() {
+                var obj = {
+                    object: {
+                        array: [{ id:1 }]
+                    }
+                };
+                var observable = new ObservableObject(obj);
+                var callback = sinon.spy();
+                observable.on('change', callback);
+                observable.dispose();
+                obj.object.array[0].property = false;
+                expect(callback.called, 'to be false');
+            });
         });
     });
 });
