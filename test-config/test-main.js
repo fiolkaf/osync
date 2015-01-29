@@ -21,6 +21,7 @@ require.config({
 
   paths: {
     'unexpected': 'node_modules/unexpected/unexpected',
+    'messagebus': 'node_modules/bussi/src/messagebus',
     'bind-polyfill': 'node_modules/polyfill-function-prototype-bind/bind'
   },
 
