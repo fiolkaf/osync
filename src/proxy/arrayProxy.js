@@ -14,8 +14,9 @@ define(function(require) {
         var trigger = Observable.mixin(proxyArray);
 
         function redefineSetters(proxyArray) {
-            // Foreach index proxy setter
+            Array.prototype.splice.call(proxyArray, 0); // clean the array
             array.forEach(function(value, index) {
+                Array.prototype.push.call(proxyArray, value);
                 Object.defineProperty(proxyArray, index, {
                     configurable: true,
                     get: function() {
@@ -23,7 +24,6 @@ define(function(require) {
                     },
                     set: function(value) {
                         array[index] = value;
-
                         trigger('change', index, value);
                     }
                 });
@@ -33,9 +33,6 @@ define(function(require) {
         function proxy(method) {
             var args = Array.prototype.slice.call(arguments, 1);
             // DO not reverse and sort proxy as those already work on indexers
-            if (['reverse', 'sort'].indexOf(method) < 0) {
-                Array.prototype[method].apply(proxyArray, args);
-            }
             var result = Array.prototype[method].apply(array, args);
             if (['pop', 'shift'].indexOf(method) >= 0) {
                 trigger('change', method, result);

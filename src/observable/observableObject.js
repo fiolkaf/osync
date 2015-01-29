@@ -1,6 +1,7 @@
 define(function(require) {
     'use strict';
 
+    var Disposable = require('src/mixin/disposable');
     var ObjectProxy = require('src/proxy/objectProxy');
     var ArrayProxy = require('src/proxy/arrayProxy');
 
@@ -12,19 +13,22 @@ define(function(require) {
      */
     function ObservableArray(array) {
         var proxy = new ArrayProxy(array);
+        Disposable.mixin(proxy);
 
         array.forEach(function(item, index) {
             if (Array.isArray(item)) {
                 throw 'Observable array does not support nested Arrays';
             }
 
-            if (typeof item === 'object' ) {
+            if (typeof item === 'object') {
                 item = new ObservableObject(item);
-                item.on('change', function() {
+                var unsubscribe = item.on('change', function() {
                     var args = Array.prototype.slice.call(arguments, 1);
                     var argumentPath = '[' + index + '].' + arguments[0];
                     proxy._trigger.apply(this, ['change', argumentPath].concat(args));
                 });
+                proxy.addDisposer(unsubscribe);
+                proxy.addDisposer(item.dispose);
                 proxy[index] = item;
             }
         });
@@ -40,13 +44,17 @@ define(function(require) {
      */
     function ObservableObject(data) {
         var proxy = new ObjectProxy(data);
+        Disposable.mixin(proxy);
 
         Object.getOwnPropertyNames(data).forEach(function(key) {
+            var args;
+            var childProxy;
+            var unsubscribe;
             var value = data[key];
+
             if (Array.isArray(value)) {
-                var arrayProxy = new ObservableArray(value);
-                arrayProxy.on('change', function(subKey, value) {
-                    var args;
+                childProxy = new ObservableArray(value);
+                unsubscribe = childProxy.on('change', function(subKey, value) {
                     if (typeof subKey === 'number') { // Indexer assignment
                         args = Array.prototype.slice.call(arguments, 1);
                         args = ['change', key + '[' + subKey + ']'].concat(args);
@@ -54,22 +62,32 @@ define(function(require) {
                         args = Array.prototype.slice.call(arguments, 1);
                         args = ['change', key + arguments[0]].concat(args);
                     } else { // Array collection modifications
-                        args = ['change', key, { type: subKey, value: value }];
+                        args = ['change', key, {
+                            type: subKey,
+                            value: value
+                        }];
                     }
                     proxy._trigger.apply(this, args);
                 });
-                proxy[key] = arrayProxy;
-            } else if (typeof value === 'object') {
-                var propertyProxy = new ObservableObject(value);
-                propertyProxy.on('change', function() {
-                    var args = Array.prototype.slice.call(arguments, 1);
-                    var argumentPath = key + '.' + arguments[0];
-                    proxy._trigger.apply(this, ['change', argumentPath].concat(args));
-                });
-                proxy[key] = propertyProxy;
-            }
-        });
 
+            } else if (typeof value === 'object') {
+                childProxy = new ObservableObject(value);
+                unsubscribe = childProxy.on('change', function() {
+                    args = Array.prototype.slice.call(arguments, 1);
+                    var argumentPath = key + '.' + arguments[0];
+                    args = ['change', argumentPath].concat(args);
+                    proxy._trigger.apply(this, args);
+                });
+            }
+
+            if (!childProxy) {
+                return;
+            }
+            proxy[key] = childProxy;
+            proxy.addDisposer(unsubscribe);
+            proxy.addDisposer(childProxy.dispose);
+
+        });
         return proxy;
     }
 
