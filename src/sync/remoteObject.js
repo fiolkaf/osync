@@ -13,12 +13,11 @@ define(function(require) {
         var observableObject = new ObservableObject(data);
         var remoteObjects = RemoteObjectTraverse.getRemoteObjects(data);
 
-        function receiveChanges(changes) {
+        function receiveChanges(uri, changes) {
             changes.forEach(function(change) {
-                Changes.applyChanges(data, changes);
+                //TODO: we need to trigger change event again, but without publish
+                Changes.applyChanges(remoteObjects[uri], changes);
             });
-
-            //TODO: we need to trigger change event again, but without publish
         }
 
         function subscribeChanges() {
