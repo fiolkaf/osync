@@ -13,5 +13,6 @@ define(function(require) {
                 expect(function() { new RemoteObject({}); }, 'to throw error');
             });
         });
+        //TODO: continue
     });
 });

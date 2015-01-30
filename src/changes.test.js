@@ -1,6 +1,6 @@
 define(function(require) {
-    var Changes = require('src/changes');
     var expect = require('unexpected');
+    var Changes = require('src/changes');
 
     describe('Changes', function() {
         describe('applyChanges.object', function() {

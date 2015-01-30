@@ -4,11 +4,6 @@ define(function(require) {
 
     describe('RemoteObjectTraverse', function() {
         describe('getLastUriByPath', function() {
-            it('throws an error if remote object does not have uri defined', function() {
-                expect(function() {
-                    RemoteObjectTraverse.getLastUriByPath({}, '');
-                }, 'to throw error');
-            });
             it('returns itself if object has no structure', function() {
                 var obj = {
                     uri: '/remoteobject/1'
@@ -124,6 +119,42 @@ define(function(require) {
                 expect(result['/remoteobject/1'], 'to equal', obj);
                 expect(result['/remoteobject/3'], 'to equal', obj.object1.a_23_09rray1[0]);
                 expect(Object.keys(result).length, 'to equal', 2);
+            });
+        });
+        describe('getDescendentValue', function() {
+            it('can return object property', function() {
+                var obj = {
+                    property: true
+                };
+                var result = RemoteObjectTraverse.getDescendentValue(obj, 'property');
+                expect(result, 'to be true');
+            });
+            it('returns single object by property path', function() {
+                var obj = {
+                    property1: {
+                        property2: true
+                    }
+                };
+                var result = RemoteObjectTraverse.getDescendentValue(obj, 'property1.property2');
+                expect(result, 'to be true');
+            });
+            it('returns array object', function() {
+                var obj = {
+                    array: [{
+                        property2: true
+                    }]
+                };
+                var result = RemoteObjectTraverse.getDescendentValue(obj, 'array[0]');
+                expect(result.property2, 'to be true');
+            });
+            it('returns nested array object', function() {
+                var obj = {
+                    array: [
+                        [1, 2, 3]
+                    ]
+                };
+                var result = RemoteObjectTraverse.getDescendentValue(obj, 'array[0][0]');
+                expect(result, 'to equal', 1);
             });
         });
     });

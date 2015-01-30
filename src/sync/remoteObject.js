@@ -1,9 +1,9 @@
 define(function(require) {
     'use strict';
 
+    var Changes = require('src/sync/remoteObjectTraverse');
     var ObservableObject = require('src/observable/observableObject').ObservableObject;
     var MessageBusAdapter = require('src/sync/messageBusAdapter');
-    var RemoteObjectChanges = require('src/sync/remoteObjectChanges');
     var RemoteObjectTraverse = require('src/sync/remoteObjectTraverse');
 
     function RemoteObject(data) {
@@ -14,21 +14,22 @@ define(function(require) {
         var remoteObjects = RemoteObjectTraverse.getRemoteObjects(data);
 
         function receiveChanges(changes) {
-            RemoteObjectChanges.applyChanges(data, changes);
-            //TODO: trigger change event
+            changes.forEach(function(change) {
+                Changes.applyChanges(data, changes);
+            });
+
+            //TODO: we need to trigger change event again, but without publish
         }
 
         function subscribeChanges() {
             Object.keys(remoteObjects).map(function(uri) {
                 //return DataAdapter.subscribeChanges(uri, receiveChange);
-            }).forEach(
-                observableObject.addDisposer
-            );
+            }).forEach(observableObject.addDisposer);
         }
 
         function sendChange(propertyPath, type, value) {
             var changeInfo = RemoteObjectTraverse.getLastUriByPath(propertyPath);
-            dataAdapter.sendChange(changeInfo.uri, type, changeInfo.propertyPath, value);
+            dataAdapter.sendChange(changeInfo.uri, type, changeInfo.key, value);
         }
 
         var unsubscribe = observableObject.on('change', sendChange);
