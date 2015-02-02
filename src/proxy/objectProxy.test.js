@@ -77,8 +77,8 @@ define(function(require) {
                 };
                 var result = {};
                 var proxy = new ObjectProxy(obj);
-                proxy.on('change', function(key, value) {
-                    result[key] = value;
+                proxy.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 proxy.prop = 3;
                 expect(result.prop, 'to equal', 3);

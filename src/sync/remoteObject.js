@@ -1,7 +1,8 @@
 define(function(require) {
     'use strict';
 
-    var Changes = require('src/sync/remoteObjectTraverse');
+    var Changes = require('src/sync/changes');
+    var ChangeActions = require('src/sync/changeActions');
     var ObservableObject = require('src/observable/observableObject').ObservableObject;
     var MessageBusAdapter = require('src/sync/messageBusAdapter');
     var RemoteObjectTraverse = require('src/sync/remoteObjectTraverse');
@@ -13,27 +14,34 @@ define(function(require) {
         var observableObject = new ObservableObject(data);
         var remoteObjects = RemoteObjectTraverse.getRemoteObjects(data);
 
+        function sendChange(evt) {
+            var changeInfo = RemoteObjectTraverse.getLastUriByPath(data, evt.key);
+            evt.key = changeInfo.path;
+
+            var changes = Changes.mapObservableChange(evt);
+            MessageBusAdapter.sendChanges(changeInfo.object, changes);
+        }
+
         function receiveChanges(uri, changes) {
             changes.forEach(function(change) {
                 //TODO: we need to trigger change event again, but without publish
-                Changes.applyChanges(remoteObjects[uri], changes);
+                ChangeActions[change.type].execute(remoteObjects[uri], change);
+                switch(change.type) {
+                    case 'insert':
+                        subscribeRecordChanges(change.object.uri);
+                        break;
+                }
             });
         }
 
-        function subscribeChanges() {
-            Object.keys(remoteObjects).map(function(uri) {
-                //return DataAdapter.subscribeChanges(uri, receiveChange);
-            }).forEach(observableObject.addDisposer);
-        }
-
-        function sendChange(propertyPath, type, value) {
-            var changeInfo = RemoteObjectTraverse.getLastUriByPath(propertyPath);
-            dataAdapter.sendChange(changeInfo.uri, type, changeInfo.key, value);
+        function subscribeRecordChanges(uri) {
+            var unsubscribe = MessageBusAdapter.subscribeChanges(uri, receiveChanges);
+            observableObject.addDisposer(unsubscribe);
         }
 
         var unsubscribe = observableObject.on('change', sendChange);
         observableObject.addDisposer(unsubscribe);
-        subscribeChanges();
+        Object.keys(remoteObjects).forEach(subscribeRecordChanges);
 
         return observableObject;
     }

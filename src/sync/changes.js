@@ -1,44 +1,39 @@
 define(function(require) {
     'use strict';
 
-    function arrayRemove(array, object) {
-        var getIdentifier = function(item) {
-            return item.uri ? item.uri : item;
-        };
-        var index = array.findIndex(function(item) {
-            return getIdentifier(item) === getIdentifier(object);
-        });
-        if (index >= 0) {
-            array.splice(index, 1);
-        }
-    }
+    var ChangeActions = require('src/sync/changeActions');
 
-    function arrayInsert(array, object, index) {
-        if (typeof index === 'undefined') {
-            index = array.length;
-        }
-        index = array.length <= index ? array.length: index;
-        array.splice(index, 0, object);
-    }
+    function mapObservableChange(evt) {
+        switch(evt.type) {
+            case 'splice':
+                var startIndex = evt.args[0];
+                var deleted = Array.isArray(evt.result) ? evt.result : [evt.result];
+                var inserted = Array.prototype.slice.call(evt.args, 2);
 
-    function applyChange(obj, change) {
-        switch (change.type) {
-            case 'set':
-                obj[change.property] = change.object;
+                var deleteChanges = deleted.map(function(item) {
+                    return ChangeActions.remove.create(evt.key, item);
+                });
+
+                var insertChanges = inserted.map(function(item, index) {
+                    return ChangeActions.insert.create(evt.key, item, startIndex + index);
+                });
+
+                return deleteChanges.concat(insertChanges);
+            case 'unshift':
                 break;
-            case 'insert':
-                arrayInsert(obj[change.property] , change.object, change.index);
+            case 'pop':
                 break;
-            case 'remove':
-                arrayRemove(obj[change.property] , change.object);
+            case 'push':
                 break;
-            default:
-                throw 'Change type not recognized ' + change.type;
+            case 'shift':
+                break;
         }
+
+        return changes;
     }
 
     return {
-        applyChange: applyChange
+        mapObservableChange: mapObservableChange
     };
 
 });

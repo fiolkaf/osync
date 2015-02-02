@@ -96,92 +96,112 @@ define(function(require) {
             it('triggers pop event on a single item', function() {
                 var array = [1, 2, 3];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method, item) {
-                    result[method] = item;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'pop',
+                        args: [],
+                        result: 3
+                    });
                 });
                 var value = proxy.pop();
-                expect(result.pop, 'to equal', 3);
+                expect(value, 'to equal', 3);
             });
             it('triggers push event on a single item', function() {
                 var array = [1, 2, 3];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method, items) {
-                    result[method] = items;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'push',
+                        args: [4],
+                        result: 4
+                    });
                 });
                 proxy.push(4);
-                expect(result.push, 'to equal', [4]);
+
             });
             it('triggers push event on multiple items', function() {
                 var array = [1, 2, 3];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method, items) {
-                    result[method] = items;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'push',
+                        args: [4, 5],
+                        result: 5
+                    });
                 });
                 proxy.push(4, 5);
-                expect(result.push, 'to equal', [4, 5]);
             });
             it('triggers reverse array event', function() {
                 var array = [1, 2, 3];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method) {
-                    result[method] = true;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'reverse',
+                        args: [],
+                        result: [3, 2, 1]
+                    });
                 });
                 proxy.reverse();
-                expect(result.reverse, 'to be true');
             });
             it('triggers shift array event', function() {
                 var array = [1, 2, 3];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method, item) {
-                    result[method] = item;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'shift',
+                        result: 1,
+                        args: []
+                    });
                 });
                 proxy.shift();
-                expect(result.shift, 'to equal', 1);
             });
             it('triggers sort event on array', function() {
-                var array = [1, 2, 3];
+                var array = [3, 2, 1];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method) {
-                    result[method] = true;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'sort',
+                        args: [],
+                        result: [1, 2, 3]
+                    });
                 });
                 proxy.sort();
-                expect(result.sort, 'to be true');
             });
             it('triggers splice event on array', function() {
                 var array = [1, 2, 3];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method, items) {
-                    result[method] = items;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'splice',
+                        result: [2, 3],
+                        args: [1, 2]
+                    });
                 });
                 proxy.splice(1, 2);
-                expect(result.splice, 'to equal', [1, 2]);
             });
             it('triggers unshift event on a single array element', function() {
                 var array = [1, 2, 3];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method, items) {
-                    result[method] = items;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'unshift',
+                        result: 4,
+                        args: [0]
+                    });
                 });
                 proxy.unshift(0);
-                expect(result.unshift, 'to equal', [0]);
             });
             it('triggers unshift event on multiple array elements', function() {
                 var array = [1, 2, 3];
                 var proxy = new ArrayProxy(array);
-                var result = {};
-                proxy.on('change', function(method, items) {
-                    result[method] = items;
+                proxy.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        type: 'unshift',
+                        result: 5,
+                        args: [-1, 0]
+                    });
                 });
                 proxy.unshift(-1, 0);
-                expect(result.unshift, 'to equal', [-1, 0]);
             });
         });
     });

@@ -35,8 +35,8 @@ define(function(require) {
                 };
                 var observable = new ObservableObject(obj);
                 var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 observable.property1 = 2;
                 expect(result.property1, 'to equal', 2);
@@ -47,8 +47,8 @@ define(function(require) {
                 };
                 var observable = new ObservableObject(obj);
                 var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 observable.array1 = [1];
                 expect(result.array1, 'to equal', [1]);
@@ -59,8 +59,8 @@ define(function(require) {
                 };
                 var observable = new ObservableObject(obj);
                 var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 observable.id = 2;
                 expect(result.id, 'to equal', 2);
@@ -75,8 +75,8 @@ define(function(require) {
                 };
                 var observable = new ObservableObject(obj);
                 var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 observable.property1.property2 = 2;
                 expect(result['property1.property2'], 'to equal', 2);
@@ -91,8 +91,8 @@ define(function(require) {
                 };
                 var observable = new ObservableObject(obj);
                 var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 observable.property1.property2.property3 = 2;
                 expect(result['property1.property2.property3'], 'to equal', 2);
@@ -107,8 +107,8 @@ define(function(require) {
                 };
                 var observable = new ObservableObject(obj);
                 var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 observable.property1 = {
                     property3: 2
@@ -128,8 +128,8 @@ define(function(require) {
                 var observable = new ObservableObject(obj);
                 var result = {};
 
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 observable.property1.property2 = {
                     id: 2
@@ -151,8 +151,8 @@ define(function(require) {
                 var observable = new ObservableObject(obj);
                 var result = {};
 
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    result[evt.key] = evt.value;
                 });
                 observable.property1.property2.property3 = {
                     id: 2
@@ -163,17 +163,35 @@ define(function(require) {
             });
         });
         describe('array subscription', function() {
-            it('receives events about array property changes', function() {
+            it('receives events about single array push changes', function() {
                 var obj = {
                     array: []
                 };
                 var observable = new ObservableObject(obj);
-                var result = {};
-                observable.on('change', function(key, change) {
-                    result[key] = change.value;
+                observable.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        key: 'array',
+                        type: 'push',
+                        args: [1],
+                        result: 1
+                    });
                 });
                 observable.array.push(1);
-                expect(result.array, 'to equal', [1]);
+            });
+            it('receives events about multiple array push changes', function() {
+                var obj = {
+                    array: []
+                };
+                var observable = new ObservableObject(obj);
+                observable.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        key: 'array',
+                        type: 'push',
+                        args: [1, 2],
+                        result: 2
+                    });
+                });
+                observable.array.push(1, 2);
             });
             it('receives events about nested array property changes', function() {
                 var obj = {
@@ -182,13 +200,15 @@ define(function(require) {
                     }
                 };
                 var observable = new ObservableObject(obj);
-                var result = {};
-                observable.on('change', function(key, change) {
-                    expect(change.type, 'to equal', 'push');
-                    result[key] = change.value;
+                observable.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        key: 'property1.array',
+                        type: 'push',
+                        args: [1],
+                        result: 1
+                    });
                 });
                 observable.property1.array.push(1);
-                expect(result['property1.array'], 'to equal', [1]);
             });
             it('receives events about array objects changes', function() {
                 var obj = {
@@ -199,12 +219,14 @@ define(function(require) {
                     }]
                 };
                 var observable = new ObservableObject(obj);
-                var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        key: 'array[0].id',
+                        type: 'set',
+                        value: 1
+                    });
                 });
                 observable.array[0].id = 1;
-                expect(result['array[0].id'], 'to equal', 1);
             });
             it('receives events about nested array objects changes', function() {
                 var obj = {
@@ -215,12 +237,14 @@ define(function(require) {
                     }]
                 };
                 var observable = new ObservableObject(obj);
-                var result = {};
-                observable.on('change', function(key, value) {
-                    result[key] = value;
+                observable.on('change', function(evt) {
+                    expect(evt, 'to equal', {
+                        key: 'array[0].array[0].id',
+                        type: 'set',
+                        value: 1
+                    });
                 });
                 observable.array[0].array[0].id = 1;
-                expect(result['array[0].array[0].id'], 'to equal', 1);
             });
             /*
                         it('receives events about new object assignment', function() {
@@ -321,7 +345,9 @@ define(function(require) {
             it('does not fire "change" event after disposing - array object assignments', function() {
                 var obj = {
                     object: {
-                        array: [{ id:1 }]
+                        array: [{
+                            id: 1
+                        }]
                     }
                 };
                 var observable = new ObservableObject(obj);

@@ -20,8 +20,12 @@ define(function(require) {
                     return data[key];
                 },
                 set: function(value) {
+                    trigger('change', {
+                        key: key,
+                        type: 'set',
+                        value: value
+                    });
                     data[key] = value;
-                    trigger('change', key, value);
                 }
             });
         });

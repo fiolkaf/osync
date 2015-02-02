@@ -15,21 +15,25 @@ define(function(require) {
         var proxy = new ArrayProxy(array);
         Disposable.mixin(proxy);
 
+        function getObservableArrayObject(index, item) {
+            var observable = new ObservableObject(item);
+            var unsubscribe = observable.on('change', function(evt) {
+                evt.key = '[' + index + '].' + evt.key;
+                proxy._trigger.call(this, 'change', evt);
+            });
+            proxy.addDisposer(unsubscribe);
+            proxy.addDisposer(observable.dispose);
+
+            return observable;
+        }
+
         array.forEach(function(item, index) {
             if (Array.isArray(item)) {
                 throw 'Observable array does not support nested Arrays';
             }
 
             if (typeof item === 'object') {
-                item = new ObservableObject(item);
-                var unsubscribe = item.on('change', function() {
-                    var args = Array.prototype.slice.call(arguments, 1);
-                    var argumentPath = '[' + index + '].' + arguments[0];
-                    proxy._trigger.apply(this, ['change', argumentPath].concat(args));
-                });
-                proxy.addDisposer(unsubscribe);
-                proxy.addDisposer(item.dispose);
-                proxy[index] = item;
+                proxy[index] = getObservableArrayObject(index, item);
             }
         });
 
@@ -47,36 +51,29 @@ define(function(require) {
         Disposable.mixin(proxy);
 
         Object.getOwnPropertyNames(data).forEach(function(key) {
-            var args;
+            var eventArgs;
             var childProxy;
             var unsubscribe;
             var value = data[key];
 
             if (Array.isArray(value)) {
                 childProxy = new ObservableArray(value);
-                unsubscribe = childProxy.on('change', function(subKey, value) {
-                    if (typeof subKey === 'number') { // Indexer assignment
-                        args = Array.prototype.slice.call(arguments, 1);
-                        args = ['change', key + '[' + subKey + ']'].concat(args);
-                    } else if (subKey.indexOf('.') > -1) { // Nested properties
-                        args = Array.prototype.slice.call(arguments, 1);
-                        args = ['change', key + arguments[0]].concat(args);
-                    } else { // Array collection modifications
-                        args = ['change', key, {
-                            type: subKey,
-                            value: value
-                        }];
+                unsubscribe = childProxy.on('change', function(evt) {
+                    if (evt.key) { //Rely children events
+                        evt.key = key + evt.key;
+                    } else if (evt.type === 'set'){
+                        evt.key = key + '[' + evt.index + ']';
+                    } else { // Methods
+                        evt.key = key;
                     }
-                    proxy._trigger.apply(this, args);
+                    proxy._trigger.call(this, 'change', evt);
                 });
 
             } else if (typeof value === 'object') {
                 childProxy = new ObservableObject(value);
-                unsubscribe = childProxy.on('change', function() {
-                    args = Array.prototype.slice.call(arguments, 1);
-                    var argumentPath = key + '.' + arguments[0];
-                    args = ['change', argumentPath].concat(args);
-                    proxy._trigger.apply(this, args);
+                unsubscribe = childProxy.on('change', function(evt) {
+                    evt.key = key + '.' + evt.key;
+                    proxy._trigger.call(this, 'change', evt);
                 });
             }
 

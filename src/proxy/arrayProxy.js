@@ -24,7 +24,11 @@ define(function(require) {
                     },
                     set: function(value) {
                         array[index] = value;
-                        trigger('change', index, value);
+                        trigger('change', {
+                            type: 'set',
+                            index: index,
+                            value: value
+                        });
                     }
                 });
             });
@@ -32,13 +36,13 @@ define(function(require) {
 
         function proxy(method) {
             var args = Array.prototype.slice.call(arguments, 1);
-            // DO not reverse and sort proxy as those already work on indexers
             var result = Array.prototype[method].apply(array, args);
-            if (['pop', 'shift'].indexOf(method) >= 0) {
-                trigger('change', method, result);
-            } else {
-                trigger('change', method, args);
-            }
+
+            trigger('change', {
+                type: method,
+                args: args,
+                result: result
+            });
             redefineSetters(proxyArray);
 
             return result;
