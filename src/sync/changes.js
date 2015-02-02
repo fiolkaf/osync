@@ -14,23 +14,11 @@ define(function(require) {
     }
 
     function arrayInsert(array, object, index) {
-        index = array.length >= index ? array.length - 1: index;
-        array.splice(index, 0, object);
-    }
-
-    function arrayChange(obj, change) {
-        var array = obj[change.property];
-        switch (change.method) {
-            // pop / shift
-            case 'remove':
-                arrayRemove(array, change.object);
-                break;
-            // push / unshift
-            case 'insert':
-                arrayInsert(array, change.object, change.index ? change.index : 0);
-                break;
+        if (typeof index === 'undefined') {
+            index = array.length;
         }
-
+        index = array.length <= index ? array.length: index;
+        array.splice(index, 0, object);
     }
 
     function applyChange(obj, change) {
@@ -38,8 +26,11 @@ define(function(require) {
             case 'set':
                 obj[change.property] = change.object;
                 break;
-            case 'array':
-                arrayChange(obj, change);
+            case 'insert':
+                arrayInsert(obj[change.property] , change.object, change.index);
+                break;
+            case 'remove':
+                arrayRemove(obj[change.property] , change.object);
                 break;
             default:
                 throw 'Change type not recognized ' + change.type;
