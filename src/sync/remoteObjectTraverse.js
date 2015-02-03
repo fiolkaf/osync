@@ -35,12 +35,13 @@ define(function(require) {
 
     function getObjectsInPath(object, key) {
         var indexes = getIndexes(key);
-        return iterateObjectPath(object, indexes);
+        var result = iterateObjectPath(object, indexes);
+        result.unshift(object);
+        return result;
     }
 
     function getLastUriByPath(object, key) {
         var objectsInPath = getObjectsInPath(object, key);
-        objectsInPath.unshift(object);
 
         var remoteObjects = objectsInPath.filter(function(item) {
             return item.hasOwnProperty('uri');
@@ -53,6 +54,15 @@ define(function(require) {
         return {
             object: remoteObject,
             path: keys.slice(index).join('.')
+        };
+    }
+
+    function getDescendentObject(object, key) {
+        var objectsInPath = getObjectsInPath(object, key);
+        var keys = key.replace(/\[/g, '.[').split('.');
+        return {
+            property: keys[keys.length - 1],
+            object: objectsInPath[objectsInPath.length - 2],
         };
     }
 
@@ -75,6 +85,7 @@ define(function(require) {
 
     return {
         getLastUriByPath: getLastUriByPath,
+        getDescendentObject: getDescendentObject,
         getDescendentValue: getDescendentValue,
         getRemoteObjects: getRemoteObjects
     };

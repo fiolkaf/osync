@@ -18,8 +18,9 @@ module.exports = function(config) {
       'test-config/test-main.js',
       {pattern: 'node_modules/unexpected/*.js', included: false},
       {pattern: 'node_modules/bussi/src/*.js', included: false},
-      {pattern: 'node_modules/array.prototype.*/index.js', included: true},
       {pattern: 'node_modules/polyfill-function-prototype-bind/*.js', included: false},
+      {pattern: 'node_modules/es6-shim/es6-shim.js', included: false},
+      {pattern: 'node_modules/es5-shim/es5-shim.js', included: false},
       {pattern: 'src/**/*.js', included: false}
     ],
 

@@ -157,5 +157,45 @@ define(function(require) {
                 expect(result, 'to equal', 1);
             });
         });
+        describe('getDescendentObject', function() {
+            it('can return object property', function() {
+                var obj = {
+                    property: true
+                };
+                var result = RemoteObjectTraverse.getDescendentObject(obj, 'property');
+                expect(result.object, 'to equal', obj);
+                expect(result.property, 'to equal', 'property');
+            });
+            it('returns single object by property path', function() {
+                var obj = {
+                    property1: {
+                        property2: true
+                    }
+                };
+                var result = RemoteObjectTraverse.getDescendentObject(obj, 'property1.property2');
+                expect(result.object, 'to equal', obj.property1);
+                expect(result.property, 'to equal', 'property2');
+            });
+            it('returns array object', function() {
+                var obj = {
+                    array: [{
+                        property2: true
+                    }]
+                };
+                var result = RemoteObjectTraverse.getDescendentObject(obj, 'array[0].property2');
+                expect(result.property, 'to equal', 'property2');
+                expect(result.object, 'to equal', obj.array[0]);
+            });
+            it('returns nested array object', function() {
+                var obj = {
+                    array: [
+                        [1, 2, 3]
+                    ]
+                };
+                var result = RemoteObjectTraverse.getDescendentObject(obj, 'array[0][0]');
+                expect(result.property, 'to equal', '[0]');
+                expect(result.object, 'to equal', [1, 2, 3]);
+            });
+        });
     });
 });

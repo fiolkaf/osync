@@ -30,7 +30,9 @@ define(function(require) {
         function receiveChanges(uri, changes) {
             changes.forEach(function(change) {
                 //TODO: we need to trigger change event again, but without publish
-                ChangeActions[change.type].execute(remoteObjects[uri], change);
+                var descendentObject = RemoteObjectTraverse.getDescendentObject(observableObject, change.property);
+                change = Object.assign({}, change, {property: descendentObject.property});
+                ChangeActions[change.type].execute(descendentObject.object, change);
             });
         }
 

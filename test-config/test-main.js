@@ -22,12 +22,14 @@ require.config({
   paths: {
     'unexpected': 'node_modules/unexpected/unexpected',
     'messagebus': 'node_modules/bussi/src/messagebus',
-    'bind-polyfill': 'node_modules/polyfill-function-prototype-bind/bind'
+    'bind-polyfill': 'node_modules/polyfill-function-prototype-bind/bind',
+    'es5': 'node_modules/es5-shim/es5-shim',
+    'es6': 'node_modules/es6-shim/es6-shim',
   },
 
   shim: {
       'unexpected': {
-          deps: ['bind-polyfill']
+          deps: ['es5', 'es6']
       }
   },
 
