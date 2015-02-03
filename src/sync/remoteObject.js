@@ -9,6 +9,7 @@ function RemoteObject(data) {
         throw 'Remote object must have "uri" identifier';
     }
     var observableObject = new ObservableObject(data);
+    var _receive = false;
     var _subscriptions = {};
     var remoteObjects = RemoteObjectTraverse.getRemoteObjects(data);
 
@@ -28,23 +29,25 @@ function RemoteObject(data) {
                     break;
             }
         });
-
-        MessageBusAdapter.sendChanges(changeInfo.object.uri, changes);
+        if (!_receive) {
+            MessageBusAdapter.sendChanges(changeInfo.object.uri, changes);
+        }
     }
 
     function receiveChanges(uri, changes) {
         if (!remoteObjects[uri]) { //Ignore - object was removed
             return;
         }
+        _receive = true;
         var obj = remoteObjects[uri];
         changes.forEach(function(change) {
-            //TODO: we need to trigger change event again, but without publish
             var descendentObject = RemoteObjectTraverse.getDescendentObject(obj, change.property);
             change = Object.assign({}, change, {
                 property: descendentObject.property
             });
             ChangeActions[change.type].execute(descendentObject.object, change);
         });
+        _receive = false;
     }
 
     function subscribeRecordChanges(uri) {

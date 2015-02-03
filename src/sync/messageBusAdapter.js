@@ -6,7 +6,8 @@ module.exports = {
     },
     subscribeChanges: function(uri, callback) {
         return MessageBus.channel('data').subscribe('update' + uri, function(envelope) {
-            callback(envelope.payload);
+            var clone = JSON.parse(JSON.stringify(envelope.payload));
+            callback(uri, clone);
         });
     }
 };

@@ -30,7 +30,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'src/**/*.js': ['commonjs', 'coverage'],
+        'src/**/*.js': ['commonjs'],
         'node_modules/es6-shim/*.js': ['commonjs'],
         'node_modules/bussi/**/*.js': ['commonjs'],
         'node_modules/unexpected/unexpected.js': ['commonjs']
@@ -63,7 +63,7 @@ module.exports = function(config) {
 
 
     // enable / disable watching file and executing tests whenever any file changes
-    autoWatch: false,
+    autoWatch: true,
 
 
     // start these browsers
