@@ -19,18 +19,18 @@ define(function(require) {
             evt.key = changeInfo.path;
 
             var changes = Changes.mapObservableChange(evt);
-            MessageBusAdapter.sendChanges(changeInfo.object, changes);
+            changes.filter(function(change) {
+                return change.type === 'insert';
+            }).forEach(function(change) {
+                subscribeRecordChanges(change.object.uri);
+            });
+            MessageBusAdapter.sendChanges(changeInfo.object.uri, changes);
         }
 
         function receiveChanges(uri, changes) {
             changes.forEach(function(change) {
                 //TODO: we need to trigger change event again, but without publish
                 ChangeActions[change.type].execute(remoteObjects[uri], change);
-                switch(change.type) {
-                    case 'insert':
-                        subscribeRecordChanges(change.object.uri);
-                        break;
-                }
             });
         }
 

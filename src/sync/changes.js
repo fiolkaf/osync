@@ -19,17 +19,22 @@ define(function(require) {
                 });
 
                 return deleteChanges.concat(insertChanges);
-            case 'unshift':
-                break;
-            case 'pop':
-                break;
             case 'push':
-                break;
+                return evt.args.map(function(item, index) {
+                    return ChangeActions.insert.create(evt.key, item, evt.result - evt.args.length + index);
+                });
+            case 'unshift':
+                return evt.args.map(function(item, index) {
+                    return ChangeActions.insert.create(evt.key, item, index);
+                });
+            case 'pop':
             case 'shift':
-                break;
+                return [ChangeActions.remove.create(evt.key, evt.result)];
+            case 'set':
+                return [ChangeActions.set.create(evt.key, evt.value)];
+            default:
+                throw evt.type + ' id not supported';
         }
-
-        return changes;
     }
 
     return {
