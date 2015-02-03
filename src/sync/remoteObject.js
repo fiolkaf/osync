@@ -9,24 +9,37 @@ function RemoteObject(data) {
         throw 'Remote object must have "uri" identifier';
     }
     var observableObject = new ObservableObject(data);
+    var _subscriptions = {};
     var remoteObjects = RemoteObjectTraverse.getRemoteObjects(data);
 
     function sendChange(evt) {
         var changeInfo = RemoteObjectTraverse.getLastUriByPath(data, evt.key);
         evt.key = changeInfo.path;
+
         var changes = Changes.mapObservableChange(evt);
-        changes.filter(function(change) {
-            return change.type === 'insert';
-        }).forEach(function(change) {
-            subscribeRecordChanges(change.object.uri);
+        changes.forEach(function(change) {
+            switch(change.type) {
+                case 'insert':
+                    subscribeRecordChanges(change.object.uri);
+                    remoteObjects[change.object.uri] = change.object;
+                    break;
+                case 'remove':
+                    remoteObjects[change.object.uri] = null;
+                    break;
+            }
         });
+
         MessageBusAdapter.sendChanges(changeInfo.object.uri, changes);
     }
 
     function receiveChanges(uri, changes) {
+        if (!remoteObjects[uri]) { //Ignore - object was removed
+            return;
+        }
+        var obj = remoteObjects[uri];
         changes.forEach(function(change) {
             //TODO: we need to trigger change event again, but without publish
-            var descendentObject = RemoteObjectTraverse.getDescendentObject(observableObject, change.property);
+            var descendentObject = RemoteObjectTraverse.getDescendentObject(obj, change.property);
             change = Object.assign({}, change, {
                 property: descendentObject.property
             });
@@ -37,10 +50,13 @@ function RemoteObject(data) {
     function subscribeRecordChanges(uri) {
         var unsubscribe = MessageBusAdapter.subscribeChanges(uri, receiveChanges);
         observableObject.addDisposer(unsubscribe);
+        _subscriptions[uri] = unsubscribe;
     }
 
     var unsubscribe = observableObject.on('change', sendChange);
     observableObject.addDisposer(unsubscribe);
+
+
     Object.keys(remoteObjects).forEach(subscribeRecordChanges);
     return observableObject;
 }

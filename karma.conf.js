@@ -16,6 +16,7 @@ module.exports = function(config) {
     // list of files / patterns to load in the browser
     files: [
       { pattern: 'node_modules/unexpected/unexpected.js', watched: 'false', served:  'true', included: 'false' },
+      { pattern: 'node_modules/bussi/**/*.js', watched: 'false', served:  'true', included: 'false' },
       'node_modules/es6-shim/es6-shim.js',
       'src/**/*.js'
     ],
@@ -31,6 +32,7 @@ module.exports = function(config) {
     preprocessors: {
         'src/**/*.js': ['commonjs', 'coverage'],
         'node_modules/es6-shim/*.js': ['commonjs'],
+        'node_modules/bussi/**/*.js': ['commonjs'],
         'node_modules/unexpected/unexpected.js': ['commonjs']
     },
 

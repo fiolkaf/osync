@@ -6,8 +6,8 @@ describe('RemoteObject', function() {
     var _messageBusSpy;
     before(function() {
         _messageBusSpy = {
-            subscribeChanges: sinon.stub(MessageBusAdapter, 'subscribeChanges', sinon.spy()),
-            sendChanges: sinon.stub(MessageBusAdapter, 'sendChanges', sinon.spy())
+            subscribeChanges: sinon.stub(MessageBusAdapter, 'subscribeChanges'),
+            sendChanges: sinon.stub(MessageBusAdapter, 'sendChanges')
         };
     });
     after(function() {
@@ -68,6 +68,39 @@ describe('RemoteObject', function() {
             }]);
             expect(_messageBusSpy.subscribeChanges.calledWith('/remoteobject/5'), 'to be true');
         });
+        it('can receive changes for removed objects', function() {
+            var obj = {
+                uri: '/remoteobject/1',
+                array1: [{
+                    uri: '/remoteobject/2',
+                    property: false
+                }]
+            };
+
+            var spyCall = _messageBusSpy.subscribeChanges.withArgs('/remoteobject/2');
+            var remoteObject = new RemoteObject(obj);
+            var receiveCallback = spyCall.args[0][1];
+
+            obj.array1.splice(0, 1);
+            receiveCallback('/remoteobject/2', [{
+                type: 'set',
+                property: 'property',
+                object: false
+            }]);
+        });
+        it('unsubscribes all uris when disposed', function() {
+            var obj = {
+                uri: '/remoteobject/1',
+                array1: [{
+                    uri: '/remoteobject/2'
+                }]
+            };
+            var unsubscribeSpy = sinon.spy();
+            _messageBusSpy.subscribeChanges.returns(unsubscribeSpy);
+            var remoteObject = new RemoteObject(obj);
+            remoteObject.dispose();
+            expect(unsubscribeSpy.calledTwice, 'to be true');
+        });
+
     });
-    //TODO: continue
 });

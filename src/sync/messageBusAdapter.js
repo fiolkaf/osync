@@ -1,4 +1,4 @@
-//var MessageBus = require('messagebus');
+var MessageBus = require('bussi');
 
 module.exports = {
     sendChanges: function(uri, changes) {
