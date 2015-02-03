@@ -10,18 +10,14 @@ module.exports = function(config) {
 
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'requirejs', 'sinon'],
+    frameworks: ['mocha', 'sinon', 'commonjs', 'es5-shim'],
 
 
     // list of files / patterns to load in the browser
     files: [
-      'test-config/test-main.js',
-      {pattern: 'node_modules/unexpected/*.js', included: false},
-      {pattern: 'node_modules/bussi/src/*.js', included: false},
-      {pattern: 'node_modules/polyfill-function-prototype-bind/*.js', included: false},
-      {pattern: 'node_modules/es6-shim/es6-shim.js', included: false},
-      {pattern: 'node_modules/es5-shim/es5-shim.js', included: false},
-      {pattern: 'src/**/*.js', included: false}
+      { pattern: 'node_modules/unexpected/unexpected.js', watched: 'false', served:  'true', included: 'false' },
+      'node_modules/es6-shim/es6-shim.js',
+      'src/**/*.js'
     ],
 
 
@@ -33,7 +29,9 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
-        'src/**/*.js': ['coverage']
+        'src/**/*.js': ['commonjs', 'coverage'],
+        'node_modules/es6-shim/*.js': ['commonjs'],
+        'node_modules/unexpected/unexpected.js': ['commonjs']
     },
 
 

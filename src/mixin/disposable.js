@@ -1,25 +1,22 @@
-define(function(require){
+function Disposable(target) {
+   if (target.dispose !== undefined) {
+       throw '"dispose" method already defined';
+   }
+   var _disposers = [];
 
-    function Disposable(target) {
-       if (target.dispose !== undefined) {
-           throw '"dispose" method already defined';
-       }
+   target.addDisposer = function(disposer) {
+       _disposers.push(disposer);
+   };
 
-       var _disposers = [];
-       target.addDisposer = function(disposer) {
-           _disposers.push(disposer);
-       };
+   target.dispose = function() {
+       _disposers.forEach(function(disposer) {
+           disposer();
+       });
+   };
 
-       target.dispose = function() {
-           _disposers.forEach(function(disposer) {
-               disposer();
-           });
-       };
+   return target;
+}
 
-       return target;
-    }
-
-    return {
-        mixin: Disposable
-    };
-});
+module.exports = {
+    mixin: Disposable
+};

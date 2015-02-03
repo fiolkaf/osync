@@ -22,8 +22,6 @@
   },
   "homepage": "https://github.com/fiolkaf/nsync",
   "devDependencies": {
-    "array.prototype.findindex": "^1.0.0",
-    "es5-shim": "^4.0.6",
     "es6-shim": "^0.23.0",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.0",
@@ -32,18 +30,18 @@
     "jshint": "^2.6.0",
     "karma": "^0.12.31",
     "karma-chrome-launcher": "^0.1.7",
+    "karma-commonjs": "0.0.13",
     "karma-coverage": "^0.2.7",
+    "karma-es5-shim": "0.0.4",
     "karma-firefox-launcher": "^0.1.4",
     "karma-mocha": "^0.1.10",
     "karma-phantomjs-launcher": "^0.1.4",
-    "karma-requirejs": "^0.2.2",
     "karma-sinon": "^1.0.4",
     "mocha": "^2.1.0",
-    "requirejs": "^2.1.15",
     "sinon": "^1.12.2",
     "unexpected": "^5.7.1"
   },
   "dependencies": {
-    "bussi": "0.0.1"
+    "bussi": "^0.0.3"
   }
 }

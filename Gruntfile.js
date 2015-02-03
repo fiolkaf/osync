@@ -13,10 +13,10 @@ module.exports = function(grunt) {
             default: {
                 options: {
                     thresholds: {
-                        'statements': 80,
-                        'branches': 80,
-                        'lines': 80,
-                        'functions': 80
+                        'statements': 70,
+                        'branches': 70,
+                        'lines': 70,
+                        'functions': 70
                     },
                     dir: 'coverage',
                     root: '.'
