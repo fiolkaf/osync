@@ -11,6 +11,7 @@ var ArrayProxy = require('../proxy/arrayProxy');
 function ObservableArray(array) {
     var proxy = new ArrayProxy(array);
     Disposable.mixin(proxy);
+
     function getObservableArrayObject(index, item) {
         var observable = new ObservableObject(item);
         var unsubscribe = observable.on('change', function(evt) {
@@ -21,6 +22,7 @@ function ObservableArray(array) {
         proxy.addDisposer(observable.dispose);
         return observable;
     }
+
     array.forEach(function(item, index) {
         if (Array.isArray(item)) {
             throw 'Observable array does not support nested Arrays';
@@ -29,6 +31,32 @@ function ObservableArray(array) {
             proxy[index] = getObservableArrayObject(index, item);
         }
     });
+
+    var unsubscribe = proxy.on('change', function(evt) {
+        switch(evt.type) {
+            case 'push':
+                return evt.args.map(function(item, index) {
+                    var itemIndex = evt.result - evt.args.length + index;
+                    array[itemIndex] = typeof item === 'object' ?
+                        getObservableArrayObject(itemIndex, item) : array[itemIndex];
+                });
+            case 'unshift':
+                return evt.args.map(function(item, index) {
+                    array[index] = typeof item === 'object' ?
+                        getObservableArrayObject(index, item) : array[index];
+                });
+            case 'splice':
+                var startIndex = evt.args[0];
+                var inserted = Array.prototype.slice.call(evt.args, 2);
+                return inserted.map(function(item, index) {
+                    var itemIndex = index + startIndex;
+                    array[itemIndex] = typeof item === 'object' ?
+                        getObservableArrayObject(itemIndex, item) : array[itemIndex];
+                });
+        }
+    });
+    proxy.addDisposer(unsubscribe);
+
     return proxy;
 }
 

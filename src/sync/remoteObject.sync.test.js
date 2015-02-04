@@ -3,7 +3,7 @@ var RemoteObject = require('./remoteObject');
 
 describe('RemoteObject', function() {
 
-    describe('syncronize objects', function() {
+    describe('synchronize objects', function() {
         it('can synchronize property', function() {
             var object1 = new RemoteObject({
                 uri: 'object/1',
@@ -56,7 +56,7 @@ describe('RemoteObject', function() {
             object2.dispose();
         });
 
-        it('can synchronize inserted objects', function() {
+        it('can synchronize inserted array items', function() {
             var object1 = new RemoteObject({
                 uri: 'object/1',
                 object: {
@@ -71,17 +71,15 @@ describe('RemoteObject', function() {
                 }
             });
 
-            //TODO
-            /*
             var newItem = {uri: 'object/2', property: false};
             object1.object.array.push(newItem);
             object1.object.array[0].property = true;
 
-            expect(object1.object.array[0], 'to equal', {uri: 'object/2', property: true});
-            expect(object2.object.array[0], 'to equal', {uri: 'object/2', property: true});
+            expect(object1.object.array[0].property, 'to be true');
+            expect(object2.object.array[0].property, 'to be true');
 
             object1.dispose();
-            object2.dispose();*/
+            object2.dispose();
         });
 
     });

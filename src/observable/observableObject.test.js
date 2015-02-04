@@ -270,6 +270,134 @@ describe('ObservableObject', function() {
                         expect(result['array[0].array[0]'], 'to equal', {id: 3});
                     });*/
     });
+    describe('new item subscriptions', function() {
+        it('fire "change" event on pushed single array items', function() {
+            var observable = new ObservableObject({
+                uri: 'object/1',
+                object: {
+                    array: []
+                }
+            });
+
+            observable.object.array.push({
+                uri: 'object/2',
+                property: false
+            });
+            var callback = sinon.spy();
+            observable.on('change', callback);
+            observable.object.array[0].property = true;
+            expect(callback.called, 'to be true');
+        });
+        it('fire "change" event on pushed multiple array items', function() {
+            var observable = new ObservableObject({
+                uri: 'object/1',
+                object: {
+                    array: []
+                }
+            });
+
+            observable.object.array.push({
+                uri: 'object/2',
+                property: false
+            }, {
+                uri: 'object/3',
+                property: false
+            });
+            var callback = sinon.spy();
+            observable.on('change', callback);
+            observable.object.array[0].property = true;
+            observable.object.array[1].property = true;
+            expect(callback.calledTwice, 'to be true');
+        });
+        it('fire "change" event on unshifted single array items', function() {
+            var observable = new ObservableObject({
+                uri: 'object/1',
+                object: {
+                    array: []
+                }
+            });
+
+            observable.object.array.unshift({
+                uri: 'object/2',
+                property: false
+            });
+            var callback = sinon.spy();
+            observable.on('change', callback);
+            observable.object.array[0].property = true;
+            expect(callback.called, 'to be true');
+        });
+        it('fire "change" event on unshifted multiple array items', function() {
+            var observable = new ObservableObject({
+                uri: 'object/1',
+                object: {
+                    array: []
+                }
+            });
+
+            observable.object.array.unshift({
+                uri: 'object/2',
+                property: false
+            });
+            var callback = sinon.spy();
+            observable.on('change', callback);
+            observable.object.array[0].property = true;
+            expect(callback.called, 'to be true');
+        });
+        it('fire "change" event on unshifted multiple array items', function() {
+            var observable = new ObservableObject({
+                uri: 'object/1',
+                object: {
+                    array: []
+                }
+            });
+
+            observable.object.array.unshift({
+                uri: 'object/2',
+                property: false
+            });
+            var callback = sinon.spy();
+            observable.on('change', callback);
+            observable.object.array[0].property = true;
+            expect(callback.called, 'to be true');
+        });
+        it('fire "change" event on spliced single array item', function() {
+            var observable = new ObservableObject({
+                uri: 'object/1',
+                object: {
+                    array: []
+                }
+            });
+
+            observable.object.array.splice(0, 0, {
+                uri: 'object/2',
+                property: false
+            });
+            var callback = sinon.spy();
+            observable.on('change', callback);
+            observable.object.array[0].property = true;
+            expect(callback.called, 'to be true');
+        });
+        it('fire "change" event on spliced multiple array items', function() {
+            var observable = new ObservableObject({
+                uri: 'object/1',
+                object: {
+                    array: [{uri: 'object/2'}, {uri: 'object/3'}, {uri: 'object/4'}]
+                }
+            });
+            observable.object.array.splice(1, 0, {
+                uri: 'object/5',
+                property: false
+            }, {
+                uri: 'object/6',
+                property: false
+            });
+            var callback = sinon.spy();
+            observable.on('change', callback);
+            observable.object.array[1].property = true;
+            observable.object.array[2].property = true;
+            expect(callback.calledTwice, 'to be true');
+        });
+    });
     describe('dispose', function() {
         it('contains dispose method', function() {
             var obj = {};
