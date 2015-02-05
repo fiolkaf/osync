@@ -4,7 +4,7 @@
 
 #### Transparently synchronize Javascript objects across application and clients
 
-NSync provides object synchronization based on uris:
+OSync provides object synchronization based on uris:
 
 ```javascript
 var object1 = new NSync.RemoteObject({
