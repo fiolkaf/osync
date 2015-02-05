@@ -22,7 +22,7 @@ describe('RemoteObjectTraverse', function() {
             var result = RemoteObjectTraverse.getLastUriByPath(obj, 'object1.object12.object123');
             expect(result.object, 'to be', obj);
         });
-        it('returns full path if object has nested remote object', function() {
+        it('returns full path if object does not have nested remote object', function() {
             var obj = {
                 uri: '/remoteobject/1',
                 object1: {
@@ -35,6 +35,22 @@ describe('RemoteObjectTraverse', function() {
             expect(result.path, 'to equal', 'object1.object12.object123');
             expect(result.object, 'to be', obj);
         });
+        it('returns full path if object does not have nested remote object - array version', function() {
+            var obj = {
+                uri: 'object/1',
+                property: false,
+                object1: {
+                    array1: [{
+                        object2 : {
+                            property: false
+                        }}]
+                }
+            };
+            var result = RemoteObjectTraverse.getLastUriByPath(obj, 'object1.array1[0].object2.property');
+            expect(result.path, 'to equal', 'object1.array1[0].object2.property');
+            expect(result.object, 'to be', obj);
+        });
+
         it('gets nested object with uri', function() {
             var obj = {
                 uri: '/remoteobject/1',

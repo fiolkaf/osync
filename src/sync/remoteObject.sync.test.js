@@ -71,7 +71,10 @@ describe('RemoteObject', function() {
                 }
             });
 
-            var newItem = {uri: 'object/2', property: false};
+            var newItem = {
+                uri: 'object/2',
+                property: false
+            };
             object1.object.array.push(newItem);
             object1.object.array[0].property = true;
 
@@ -81,6 +84,36 @@ describe('RemoteObject', function() {
             object1.dispose();
             object2.dispose();
         });
+
+        it('can synchronize inserted array items', function() {
+            var remoteObject = new RemoteObject({
+                uri: 'object/1',
+                property: false,
+                object1: {
+                    array1: [{
+                        object2 : {
+                            property: false
+                        }}]
+                }
+            });
+
+            var remoteObject2 = new RemoteObject({
+                uri: 'object/1',
+                property: false,
+                object1: {
+                    array1: [{
+                        object2 : {
+                            property: false
+                        }}]
+                }
+            });
+            remoteObject.object1.array1[0].object2.property = true;
+            expect(remoteObject2.object1.array1[0].object2.property, 'to be true');
+
+            remoteObject.dispose();
+            remoteObject2.dispose();
+        });
+
 
     });
 });

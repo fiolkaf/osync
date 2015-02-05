@@ -45,7 +45,7 @@ function getLastUriByPath(object, key) {
     var keys = key.replace(/\[/g, '.[').split('.');
     return {
         object: remoteObject,
-        path: keys.slice(index).join('.')
+        path: keys.slice(index).join('.').replace(/.\[/g,'[')
     };
 }
 
