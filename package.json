@@ -1,6 +1,6 @@
 {
   "name": "osync",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Plain Javascript object synchronization framework",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/fiolkaf/nsync.git"
+    "url": "https://github.com/fiolkaf/osync.git"
   },
   "keywords": [
     "POJO",
@@ -18,9 +18,9 @@
   "author": "Filip Fiolka",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/fiolkaf/nsync/issues"
+    "url": "https://github.com/fiolkaf/osync/issues"
   },
-  "homepage": "https://github.com/fiolkaf/nsync",
+  "homepage": "https://github.com/fiolkaf/osync",
   "devDependencies": {
     "es6-shim": "^0.23.0",
     "grunt": "^0.4.5",

@@ -15,9 +15,10 @@ function RemoteObject(data) {
 
     function sendChange(evt) {
         var changeInfo = RemoteObjectTraverse.getLastUriByPath(data, evt.key);
-        evt.key = changeInfo.path;
+        var ev = Object.assign({}, evt);
+        ev.key = changeInfo.path;
 
-        var changes = Changes.mapObservableChange(evt);
+        var changes = Changes.mapObservableChange(ev);
         changes.forEach(function(change) {
             switch(change.type) {
                 case 'insert':
