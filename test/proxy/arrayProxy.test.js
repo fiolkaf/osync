@@ -1,4 +1,4 @@
-var ArrayProxy = require('./arrayProxy');
+var ArrayProxy = require('../../src/proxy/arrayProxy');
 var expect = require('unexpected/unexpected');
 
 describe('ArrayProxy', function() {

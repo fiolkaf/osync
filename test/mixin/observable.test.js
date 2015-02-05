@@ -1,5 +1,5 @@
 var expect = require('unexpected/unexpected');
-var Observable = require('./observable');
+var Observable = require('../../src/mixin/observable');
 
 describe('Observable', function() {
     var Bike = function() {

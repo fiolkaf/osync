@@ -1,6 +1,6 @@
 var expect = require('unexpected/unexpected');
-var MessageBusAdapter = require('./messageBusAdapter');
-var RemoteObject = require('./remoteObject');
+var MessageBusAdapter = require('../../src/sync/messageBusAdapter');
+var RemoteObject = require('../../src/sync/remoteObject');
 
 describe('RemoteObject', function() {
     var _messageBusSpy;

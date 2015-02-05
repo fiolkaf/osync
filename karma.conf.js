@@ -18,7 +18,8 @@ module.exports = function(config) {
       { pattern: 'node_modules/unexpected/unexpected.js', watched: 'false', served:  'true', included: 'false' },
       { pattern: 'node_modules/bussi/**/*.js', watched: 'false', served:  'true', included: 'false' },
       'node_modules/es6-shim/es6-shim.js',
-      'src/**/*.js'
+      'src/**/*.js',
+      'test/**/*.js'
     ],
 
 
@@ -31,6 +32,7 @@ module.exports = function(config) {
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
         'src/**/*.js': ['commonjs'],
+        'test/**/*.js': ['commonjs'],
         'node_modules/es6-shim/*.js': ['commonjs'],
         'node_modules/bussi/**/*.js': ['commonjs'],
         'node_modules/unexpected/unexpected.js': ['commonjs']

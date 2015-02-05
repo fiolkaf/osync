@@ -1,5 +1,5 @@
 var expect = require('unexpected/unexpected');
-var ObjectProxy = require('./objectProxy');
+var ObjectProxy = require('../../src/proxy/objectProxy');
 
 describe('ObjectProxy', function() {
     describe('object', function() {

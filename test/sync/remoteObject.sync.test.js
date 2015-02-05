@@ -1,5 +1,5 @@
 var expect = require('unexpected/unexpected');
-var RemoteObject = require('./remoteObject');
+var RemoteObject = require('../../src/sync/remoteObject');
 
 describe('RemoteObject', function() {
 

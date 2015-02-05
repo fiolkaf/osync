@@ -1,5 +1,5 @@
 var expect = require('unexpected/unexpected');
-var RemoteObjectTraverse = require('./remoteObjectTraverse');
+var RemoteObjectTraverse = require('../../src/sync/remoteObjectTraverse');
 
 describe('RemoteObjectTraverse', function() {
     describe('getLastUriByPath', function() {

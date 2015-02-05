@@ -1,5 +1,5 @@
 var expect = require('unexpected/unexpected');
-var Disposable = require('./disposable');
+var Disposable = require('../../src/mixin/disposable');
 
 describe('Disposable', function() {
     describe('dispose', function() {

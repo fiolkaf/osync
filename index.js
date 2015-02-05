@@ -4,6 +4,7 @@ var RemoteObject = require('./src/sync/remoteObject');
 
 module.exports = {
     RemoteObject: RemoteObject,
+    ObservableObject: ObservableObject,
     Mixin: {
         Observable: Observable,
         Disposable: Disposable
