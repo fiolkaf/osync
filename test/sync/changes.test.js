@@ -1,6 +1,6 @@
 var expect = require('unexpected/unexpected');
 var Changes = require('../../src/sync/changes');
-var ObservableObject = require('../../src/observable/observableObject').ObservableObject;
+var ObservableObject = require('../../src/observable/observables').ObservableObject;
 
 describe('Changes', function() {
     describe('mapObservableChange', function() {

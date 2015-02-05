@@ -75,6 +75,9 @@ function ObservableObject(data) {
         var childProxy;
         var unsubscribe;
         var value = data[key];
+        if (value === null) {
+            return;
+        }
         if (Array.isArray(value)) {
             childProxy = new ObservableArray(value);
             unsubscribe = childProxy.on('change', function(evt) {

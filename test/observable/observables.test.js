@@ -1,5 +1,5 @@
 var expect = require('unexpected/unexpected');
-var ObservableObject = require('../../src/observable/observableObject').ObservableObject;
+var ObservableObject = require('../../src/observable/observables').ObservableObject;
 
 describe('ObservableObject', function() {
     describe('create', function() {

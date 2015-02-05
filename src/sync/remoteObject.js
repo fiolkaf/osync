@@ -1,6 +1,6 @@
 var Changes = require('./changes');
 var ChangeActions = require('./changeActions');
-var ObservableObject = require('../observable/observableObject').ObservableObject;
+var ObservableObject = require('../observable/observables').ObservableObject;
 var MessageBusAdapter = require('./messageBusAdapter');
 var RemoteObjectTraverse = require('./remoteObjectTraverse');
 

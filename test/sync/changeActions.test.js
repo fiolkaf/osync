@@ -1,6 +1,6 @@
 var expect = require('unexpected/unexpected');
 var ChangeActions = require('../../src/sync/changeActions');
-var ObservableObject = require('../../src/observable/observableObject').ObservableObject;
+var ObservableObject = require('../../src/observable/observables').ObservableObject;
 
 describe('ChangeActions', function() {
     describe('set', function() {
