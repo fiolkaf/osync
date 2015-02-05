@@ -1,5 +1,5 @@
 {
-  "name": "nsync",
+  "name": "osync",
   "version": "0.0.1",
   "description": "Plain Javascript object synchronization framework",
   "main": "index.js",
