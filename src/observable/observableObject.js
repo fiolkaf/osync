@@ -15,6 +15,7 @@ function ObservableArray(array) {
     function getObservableArrayObject(index, item) {
         var observable = new ObservableObject(item);
         var unsubscribe = observable.on('change', function(evt) {
+            evt.target = evt.target ? evt.target : observable;
             evt.key = '[' + index + '].' + evt.key;
             proxy._trigger.call(this, 'change', evt);
         });
@@ -84,11 +85,13 @@ function ObservableObject(data) {
                 } else { // Methods
                     evt.key = key;
                 }
+                evt.target = evt.target ? evt.target : childProxy;
                 proxy._trigger.call(this, 'change', evt);
             });
         } else if (typeof value === 'object') {
             childProxy = new ObservableObject(value);
             unsubscribe = childProxy.on('change', function(evt) {
+                evt.target = evt.target ? evt.target : childProxy;
                 evt.key = key + '.' + evt.key;
                 proxy._trigger.call(this, 'change', evt);
             });

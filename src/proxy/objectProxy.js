@@ -16,12 +16,12 @@ module.exports = function ObjectProxy(data) {
                 return data[key];
             },
             set: function(value) {
+                data[key] = value;
                 trigger('change', {
                     key: key,
                     type: 'set',
                     value: value
                 });
-                data[key] = value;
             }
         });
     });

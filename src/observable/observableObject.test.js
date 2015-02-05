@@ -169,7 +169,8 @@ describe('ObservableObject', function() {
                     key: 'array',
                     type: 'push',
                     args: [1],
-                    result: 1
+                    result: 1,
+                    target: observable.array
                 });
             });
             observable.array.push(1);
@@ -184,7 +185,8 @@ describe('ObservableObject', function() {
                     key: 'array',
                     type: 'push',
                     args: [1, 2],
-                    result: 2
+                    result: 2,
+                    target: observable.array
                 });
             });
             observable.array.push(1, 2);
@@ -197,12 +199,11 @@ describe('ObservableObject', function() {
             };
             var observable = new ObservableObject(obj);
             observable.on('change', function(evt) {
-                expect(evt, 'to equal', {
-                    key: 'property1.array',
-                    type: 'push',
-                    args: [1],
-                    result: 1
-                });
+                expect(evt.key, 'to equal', 'property1.array');
+                expect(evt.type, 'to equal', 'push');
+                expect(evt.args, 'to equal', [1]);
+                expect(evt.result, 'to equal', 1);
+                expect(evt.target, 'to be', observable.property1.array);
             });
             observable.property1.array.push(1);
         });
@@ -219,7 +220,8 @@ describe('ObservableObject', function() {
                 expect(evt, 'to equal', {
                     key: 'array[0].id',
                     type: 'set',
-                    value: 1
+                    value: 1,
+                    target: observable.array[0]
                 });
             });
             observable.array[0].id = 1;
@@ -234,11 +236,10 @@ describe('ObservableObject', function() {
             };
             var observable = new ObservableObject(obj);
             observable.on('change', function(evt) {
-                expect(evt, 'to equal', {
-                    key: 'array[0].array[0].id',
-                    type: 'set',
-                    value: 1
-                });
+                expect(evt.key, 'to equal', 'array[0].array[0].id');
+                expect(evt.type, 'to equal', 'set');
+                expect(evt.value, 'to equal', 1);
+                expect(evt.target, 'to equal', observable.array[0].array[0]);
             });
             observable.array[0].array[0].id = 1;
         });
@@ -269,6 +270,32 @@ describe('ObservableObject', function() {
                         obj.array[0].array[0] = {id: 3};
                         expect(result['array[0].array[0]'], 'to equal', {id: 3});
                     });*/
+    });
+    describe('obejct subscription', function() {
+        it('fire "change" event on pushed single array items', function() {
+            var obj = {
+                array: [{
+                    object: {
+                        id: 1
+                    }
+                }, {
+                    id: 2
+                }]
+            };
+            var observable = new ObservableObject(obj);
+            var spy = sinon.spy();
+            observable.on('change', function(evt) {
+                expect(evt, 'to equal', {
+                    key: 'array[0].object.id',
+                    type: 'set',
+                    value: 1,
+                    target: obj.array[0].object
+                });
+                spy();
+            });
+            observable.array[0].object.id = 1;
+            expect(spy.called, 'to be true');
+        });
     });
     describe('new item subscriptions', function() {
         it('fire "change" event on pushed single array items', function() {
