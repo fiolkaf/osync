@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/fiolkaf/nsync.svg?branch=master)](https://travis-ci.org/fiolkaf/nsync)
 
-# NSync - Javascript object synchronization
+# OSync - Javascript object synchronization
 
 #### Transparently synchronize Javascript objects across application and clients
 
