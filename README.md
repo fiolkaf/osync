@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/fiolkaf/nsync.svg?branch=master)](https://travis-ci.org/fiolkaf/nsync)
+[![Build Status](https://travis-ci.org/fiolkaf/osync.svg?branch=master)](https://travis-ci.org/fiolkaf/nsync)
 
 # OSync - Javascript object synchronization
 
