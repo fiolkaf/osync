@@ -13,7 +13,7 @@ function ObservableArray(array) {
     Disposable.mixin(proxy);
 
     function getObservableArrayObject(index, item) {
-        var observable = new ObservableObject(item);
+        var observable = item.hasOwnProperty('on') ? item : new ObservableObject(item);
         var unsubscribe = observable.on('change', function(evt) {
             evt.target = evt.target ? evt.target : observable;
             evt.key = '[' + index + '].' + evt.key;

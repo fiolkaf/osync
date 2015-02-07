@@ -22,6 +22,11 @@ module.exports = function ObjectProxy(data) {
                     type: 'set',
                     value: value
                 });
+                trigger(key + 'Change', {
+                    key: key,
+                    type: 'set',
+                    value: value
+                });
             }
         });
     });
