@@ -33,12 +33,14 @@ module.exports = function ArrayProxy(array) {
     function proxy(method) {
         var args = Array.prototype.slice.call(arguments, 1);
         var result = Array.prototype[method].apply(array, args);
+        redefineSetters(proxyArray);
+
         trigger('change', {
             type: method,
             args: args,
             result: result
         });
-        redefineSetters(proxyArray);
+
         return result;
     }
 

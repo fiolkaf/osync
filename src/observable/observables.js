@@ -88,7 +88,7 @@ function ObservableObject(data) {
                 } else { // Methods
                     evt.key = key;
                 }
-                evt.target = evt.target ? evt.target : childProxy;
+                evt.target = evt.target ? evt.target : proxy;
                 proxy._trigger.call(this, 'change', evt);
             });
         } else if (typeof value === 'object') {
