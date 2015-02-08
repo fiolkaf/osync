@@ -92,7 +92,7 @@ function ObservableObject(data) {
                 proxy._trigger.call(this, 'change', evt);
             });
         } else if (typeof value === 'object') {
-            childProxy = new ObservableObject(value);
+            childProxy = value.hasOwnProperty('on') ? value : new ObservableObject(value);
             unsubscribe = childProxy.on('change', function(evt) {
                 evt.target = evt.target ? evt.target : childProxy;
                 evt.key = key + '.' + evt.key;
