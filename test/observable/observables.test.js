@@ -170,7 +170,7 @@ describe('ObservableObject', function() {
                     type: 'push',
                     args: [1],
                     result: 1,
-                    target: observable.array
+                    target: observable
                 });
             });
             observable.array.push(1);
@@ -186,7 +186,7 @@ describe('ObservableObject', function() {
                     type: 'push',
                     args: [1, 2],
                     result: 2,
-                    target: observable.array
+                    target: observable
                 });
             });
             observable.array.push(1, 2);
@@ -203,7 +203,7 @@ describe('ObservableObject', function() {
                 expect(evt.type, 'to equal', 'push');
                 expect(evt.args, 'to equal', [1]);
                 expect(evt.result, 'to equal', 1);
-                expect(evt.target, 'to be', observable.property1.array);
+                expect(evt.target, 'to be', observable.property1);
             });
             observable.property1.array.push(1);
         });
