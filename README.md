@@ -7,14 +7,14 @@
 OSync provides object synchronization based on uris:
 
 ```javascript
-var object1 = new NSync.RemoteObject({
+var object1 = new RemoteObject({
    uri: '/remote/1',
-   property: false;
+   property: false
 });
 
-var object2 = new NSync.RemoteObject({
+var object2 = new RemoteObject({
    uri: '/remote/1',
-   property: false;
+   property: false
 });
 
 object1.property = true;
@@ -38,5 +38,20 @@ remoteObject.object.array.pop(...);
 remoteObject.object.array.shift(...);
 remoteObject.object.array.unshift(...);
 remoteObject.object.array.splice(...);
-
 ```
+
+##### Nested remote objects:
+
+```javascript
+var object = new RemoteObject({
+   uri: '/remote/1',
+   property: false,
+   object: new RemoteObject({
+      uri: '/remote/1',
+      property: false
+   })
+});
+```
+##### TODO:
+
+* Server MessageBus bridge
