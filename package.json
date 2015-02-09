@@ -1,6 +1,6 @@
 {
   "name": "osync",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Plain Javascript object synchronization framework",
   "main": "index.js",
   "scripts": {
