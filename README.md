@@ -51,7 +51,9 @@ var object = new RemoteObject({
       property: false
    })
 });
+object.array.push(new RemoteObject(...));
 ```
 ##### TODO:
 
 * Server MessageBus bridge
+* Extend remote object with new properties
