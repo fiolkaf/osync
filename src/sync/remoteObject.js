@@ -1,67 +1,65 @@
 var Changes = require('./changes');
 var ChangeActions = require('./changeActions');
-var ObservableObject = require('../observable/observables').ObservableObject;
 var MessageBusAdapter = require('./messageBusAdapter');
 var RemoteObjectTraverse = require('./remoteObjectTraverse');
+var ObservableObject = require('../observable/observables').ObservableObject;
 
 function RemoteObject(data) {
     if (!data.uri) {
         throw 'Remote object must have "uri" identifier';
     }
-    var observableObject = new ObservableObject(data);
     var _receive = false;
-    var _subscriptions = {};
-    var remoteObjects = RemoteObjectTraverse.getRemoteObjects(data);
+    var _messageBus = new MessageBusAdapter();
+    var observableObject = new ObservableObject(data);
 
-    function sendChange(evt) {
-        var changeInfo = RemoteObjectTraverse.getLastUriByPath(data, evt.key);
-        var ev = Object.assign({}, evt);
-        ev.key = changeInfo.path;
-
-        var changes = Changes.mapObservableChange(ev);
-        changes.forEach(function(change) {
-            switch(change.type) {
-                case 'insert':
-                    subscribeRecordChanges(change.object.uri);
-                    remoteObjects[change.object.uri] = change.object;
-                    break;
-                case 'remove':
-                    remoteObjects[change.object.uri] = null;
-                    break;
-            }
-        });
-        if (!_receive) {
-            MessageBusAdapter.sendChanges(changeInfo.object.uri, changes);
-        }
+    function sendChange(change) {
+        var changes = Changes.mapObservableChange(change);
+        _messageBus.sendChanges(observableObject.uri, changes);
     }
 
     function receiveChanges(uri, changes) {
-        if (!remoteObjects[uri]) { //Ignore - object was removed
-            return;
-        }
         _receive = true;
-        var obj = remoteObjects[uri];
         changes.forEach(function(change) {
-            var descendentObject = RemoteObjectTraverse.getDescendentObject(obj, change.property);
+            var descendentObject = RemoteObjectTraverse.getDescendentObject(observableObject, change.property);
             change = Object.assign({}, change, {
                 property: descendentObject.property
             });
+            switch (change.type) {
+                case 'set':
+                case 'insert':
+                    if (change.object.uri) {
+                        var remoteObject = new RemoteObject(change.object);
+                        observableObject.addDisposer(remoteObject.dispose);
+                        change.object = remoteObject;
+                    }
+                break;
+            }
+
             ChangeActions[change.type].execute(descendentObject.object, change);
         });
         _receive = false;
     }
 
     function subscribeRecordChanges(uri) {
-        var unsubscribe = MessageBusAdapter.subscribeChanges(uri, receiveChanges);
+        var unsubscribe = _messageBus.subscribeChanges(uri, receiveChanges);
         observableObject.addDisposer(unsubscribe);
-        _subscriptions[uri] = unsubscribe;
     }
 
-    var unsubscribe = observableObject.on('change', sendChange);
+    var unsubscribe = observableObject.on('change', function(evt) {
+        var changeInfo = RemoteObjectTraverse.getLastUriByPath(observableObject, evt.key);
+        if (observableObject !== changeInfo.object) {
+            return;
+        }
+
+        if (_receive) {
+            return;
+        }
+
+        sendChange(evt);
+    });
     observableObject.addDisposer(unsubscribe);
+    subscribeRecordChanges(data.uri);
 
-
-    Object.keys(remoteObjects).forEach(subscribeRecordChanges);
     return observableObject;
 }
 

@@ -36,24 +36,39 @@ function ObservableArray(array) {
     var unsubscribe = proxy.on('change', function(evt) {
         switch(evt.type) {
             case 'push':
-                return evt.args.map(function(item, index) {
+                evt.args.forEach(function(item, index) {
                     var itemIndex = evt.result - evt.args.length + index;
                     array[itemIndex] = typeof item === 'object' ?
                         getObservableArrayObject(itemIndex, item) : array[itemIndex];
                 });
+            break;
             case 'unshift':
-                return evt.args.map(function(item, index) {
+                evt.args.forEach(function(item, index) {
                     array[index] = typeof item === 'object' ?
                         getObservableArrayObject(index, item) : array[index];
                 });
+            break;
             case 'splice':
                 var startIndex = evt.args[0];
                 var inserted = Array.prototype.slice.call(evt.args, 2);
-                return inserted.map(function(item, index) {
+                inserted.forEach(function(item, index) {
                     var itemIndex = index + startIndex;
                     array[itemIndex] = typeof item === 'object' ?
                         getObservableArrayObject(itemIndex, item) : array[itemIndex];
                 });
+                var deleted = Array.isArray(evt.result) ? evt.result : [evt.result];
+                deleted.forEach(function(item) {
+                    if (item.dispose) {
+                        item.dispose();
+                    }
+                });
+            break;
+            case 'pop':
+            case 'shift':
+                if (evt.result.dispose) {
+                    evt.result.dispose();
+                }
+            break;
         }
     });
     proxy.addDisposer(unsubscribe);

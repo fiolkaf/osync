@@ -7,8 +7,8 @@ module.exports = {
                 object: object
             };
         },
-        execute: function(obj, change) {
-            obj[change.property] = change.object;
+        execute: function(object, change) {
+            object[change.property] = change.object;
         }
     },
     insert: {
@@ -20,8 +20,8 @@ module.exports = {
                 index: index
             };
         },
-        execute: function(obj, change) {
-            var array = obj[change.property];
+        execute: function(object, change) {
+            var array = object[change.property];
             var index = change.index;
             if (typeof index === 'undefined') {
                 index = array.length;
@@ -38,14 +38,14 @@ module.exports = {
                 object: object
             };
         },
-        execute: function(obj, change) {
-            var array = obj[change.property];
-            var object = change.object;
+        execute: function(object, change) {
+            var array = object[change.property];
+            var obj = change.object;
             var getIdentifier = function(item) {
                 return item.uri ? item.uri : item;
             };
             var index = array.findIndex(function(item) {
-                return getIdentifier(item) === getIdentifier(object);
+                return getIdentifier(item) === getIdentifier(obj);
             });
             if (index >= 0) {
                 array.splice(index, 1);

@@ -13,10 +13,12 @@
   "keywords": [
     "POJO",
     "sync",
+    "proxy",
+    "observable",
     "synchronization"
   ],
   "author": "Filip Fiolka",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/fiolkaf/osync/issues"
   },
@@ -42,6 +44,6 @@
     "unexpected": "^5.7.1"
   },
   "dependencies": {
-    "bussi": "^0.0.3"
+    "bussi": "^0.1.1"
   }
 }

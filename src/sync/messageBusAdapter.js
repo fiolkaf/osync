@@ -1,13 +1,16 @@
 var MessageBus = require('bussi');
+var DataUtils = require('../utils/dataUtils');
 
-module.exports = {
-    sendChanges: function(uri, changes) {
-        MessageBus.channel('data').publish('update' + uri, changes);
-    },
-    subscribeChanges: function(uri, callback) {
-        return MessageBus.channel('data').subscribe('update' + uri, function(envelope) {
-            var clone = JSON.parse(JSON.stringify(envelope.payload));
-            callback(uri, clone);
+module.exports = function MessageBusAdapter() {
+    var channel = MessageBus.channel('data');
+
+    this.sendChanges = function(uri, changes) {
+        channel.publish('update' + uri, DataUtils.deepClone(changes));
+    };
+
+    this.subscribeChanges = function(uri, callback) {
+        return channel.subscribe('update' + uri, function(envelope) {
+            callback(uri, DataUtils.deepClone(envelope.payload));
         });
-    }
+    };
 };

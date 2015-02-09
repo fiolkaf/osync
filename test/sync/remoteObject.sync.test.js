@@ -71,13 +71,15 @@ describe('RemoteObject', function() {
                 }
             });
 
-            var newItem = {
+            var newItem = new RemoteObject({
                 uri: 'object/2',
                 property: false
-            };
+            });
             object1.object.array.push(newItem);
             object1.object.array[0].property = true;
 
+            expect(object1.object.array.length, 'to equal', 1);
+            expect(object2.object.array.length, 'to equal', 1);
             expect(object1.object.array[0].property, 'to be true');
             expect(object2.object.array[0].property, 'to be true');
 
@@ -113,7 +115,5 @@ describe('RemoteObject', function() {
             remoteObject.dispose();
             remoteObject2.dispose();
         });
-
-
     });
 });

@@ -20,12 +20,14 @@ module.exports = function ObjectProxy(data) {
                 trigger('change', {
                     key: key,
                     type: 'set',
-                    value: value
+                    value: value,
+                    target: proxy
                 });
                 trigger(key + 'Change', {
                     key: key,
                     type: 'set',
-                    value: value
+                    value: value,
+                    target: proxy
                 });
             }
         });

@@ -9,7 +9,9 @@ function Observable(target) {
         subscriptions[topic].push(callback);
         return function() {
             var index = subscriptions[topic].indexOf(callback);
-            subscriptions[topic].splice(index, 1);
+            if (index >= 0) {
+                subscriptions[topic].splice(index, 1);
+            }
         };
     };
 
