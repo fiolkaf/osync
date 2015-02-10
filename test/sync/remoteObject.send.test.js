@@ -68,6 +68,8 @@ describe('RemoteObject', function() {
                 property: 'property',
                 object: true
             }]), 'to be true');
+
+            obj.object.dispose();
             remoteObject.dispose();
             expect(spy.calledOnce, 'to be true');
             unsubscribe();
@@ -141,6 +143,7 @@ describe('RemoteObject', function() {
                 property: 'array'
             }]), 'to be true');
             expect(spy.calledOnce, 'to be true');
+            obj.object.dispose();
             remoteObject.dispose();
             unsubscribe();
         });
@@ -238,6 +241,7 @@ describe('RemoteObject', function() {
             }]), 'to be true');
 
             unsubscribe();
+            obj.object.dispose();
             remoteObject.dispose();
         });
         it('sends "insert" when unshift to nested array', function() {
@@ -308,6 +312,7 @@ describe('RemoteObject', function() {
             expect(spy.calledOnce, 'to be true');
 
             unsubscribe();
+            obj.object.dispose();
             remoteObject.dispose();
         });
         it('sends "remove" when pop from nested array', function() {
@@ -377,6 +382,7 @@ describe('RemoteObject', function() {
             expect(spy.calledOnce, 'to be true');
 
             unsubscribe();
+            obj.object.dispose();
             remoteObject.dispose();
         });
         it('sends "remove" when pop from nested array', function() {

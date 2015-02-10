@@ -89,6 +89,7 @@ describe('RemoteObject', function() {
                 })]
             };
             var remoteObject = new RemoteObject(obj);
+            obj.array1[0].dispose();
             remoteObject.dispose();
             expect(unsubscribeSpy.calledTwice, 'to be true');
             _messageBusSpy.subscribe = sinon.spy(_channel.subscribe);

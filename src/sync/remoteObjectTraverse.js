@@ -66,7 +66,7 @@ function getDescendentValue(object, key) {
 function getRemoteObjects(object) {
     var result = {};
     var remoteObjects = getAllObjects(object).filter(function(item) {
-        return item.hasOwnProperty('uri');
+        return item && item.hasOwnProperty('uri');
     });
     remoteObjects.forEach(function(obj) {
         result[obj.uri] = obj;

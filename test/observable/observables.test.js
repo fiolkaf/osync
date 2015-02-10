@@ -432,6 +432,7 @@ describe('ObservableObject', function() {
             var result = {};
             expect(observable.dispose, 'to be defined');
         });
+        /*
         it('disposes children', function() {
             var obj = {
                 obj: {
@@ -456,6 +457,7 @@ describe('ObservableObject', function() {
             observable.dispose();
             expect(spy.called, 'to be true');
         });
+        */
         it('does not fire "change" event after disposing', function() {
             var obj = {
                 property: true

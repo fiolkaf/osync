@@ -20,7 +20,7 @@ function ObservableArray(array) {
             proxy._trigger.call(this, 'change', evt);
         });
         proxy.addDisposer(unsubscribe);
-        proxy.addDisposer(observable.dispose);
+        observable.addDisposer(unsubscribe);
         return observable;
     }
 
@@ -119,7 +119,7 @@ function ObservableObject(data) {
         }
         proxy[key] = childProxy;
         proxy.addDisposer(unsubscribe);
-        proxy.addDisposer(childProxy.dispose);
+        childProxy.addDisposer(unsubscribe);
     });
     return proxy;
 }

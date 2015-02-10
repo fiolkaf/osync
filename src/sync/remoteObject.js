@@ -8,10 +8,10 @@ function RemoteObject(data) {
     if (!data.uri) {
         throw 'Remote object must have "uri" identifier';
     }
-    var _receive = false;
-    var _messageBus = new MessageBusAdapter();
     var self = new ObservableObject(data);
 
+    var _receive = false;
+    var _messageBus = new MessageBusAdapter();
 
     var changeLog = null;
     self.startChanges = function() {
