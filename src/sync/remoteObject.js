@@ -10,21 +10,33 @@ function RemoteObject(data) {
     }
     var _receive = false;
     var _messageBus = new MessageBusAdapter();
-    var observableObject = new ObservableObject(data);
+    var self = new ObservableObject(data);
 
-    observableObject.getDescendentObject = function(property) {
-        return RemoteObjectTraverse.getDescendentObject(observableObject, property);
+
+    var changeLog = null;
+    self.startChanges = function() {
+        changeLog = [];
     };
 
-    function sendChange(change) {
-        var changes = Changes.mapObservableChange(change);
-        _messageBus.sendChanges(observableObject.uri, changes);
+    self.commitChanges = function() {
+        sendChanges(changeLog);
+        changeLog = null;
+    };
+
+    function sendChanges(changes) {
+        var result = [];
+        changes.forEach(function(change) {
+            Array.prototype.push.apply(result, Changes.mapObservableChange(change));
+        });
+
+        self._trigger('modified', result);
+        _messageBus.sendChanges(self.uri, result);
     }
 
     function receiveChanges(uri, changes) {
         _receive = true;
         changes.forEach(function(change) {
-            var descendentObject = observableObject.getDescendentObject(change.property);
+            var descendentObject = RemoteObjectTraverse.getDescendentObject(self, change.property);
             change = Object.assign({}, change, {
                 property: descendentObject.property
             });
@@ -33,7 +45,7 @@ function RemoteObject(data) {
                 case 'insert':
                     if (change.object.uri) {
                         var remoteObject = new RemoteObject(change.object);
-                        observableObject.addDisposer(remoteObject.dispose);
+                        self.addDisposer(remoteObject.dispose);
                         change.object = remoteObject;
                     }
                 break;
@@ -46,12 +58,12 @@ function RemoteObject(data) {
 
     function subscribeRecordChanges(uri) {
         var unsubscribe = _messageBus.subscribeChanges(uri, receiveChanges);
-        observableObject.addDisposer(unsubscribe);
+        self.addDisposer(unsubscribe);
     }
 
-    var unsubscribe = observableObject.on('change', function(evt) {
-        var changeInfo = RemoteObjectTraverse.getLastUriByPath(observableObject, evt.key);
-        if (observableObject !== changeInfo.object) {
+    var unsubscribe = self.on('change', function(change) {
+        var changeInfo = RemoteObjectTraverse.getLastUriByPath(self, change.key);
+        if (self !== changeInfo.object) {
             return;
         }
 
@@ -59,12 +71,17 @@ function RemoteObject(data) {
             return;
         }
 
-        sendChange(evt);
+        if (changeLog) {
+            changeLog.push(change);
+        } else {
+            sendChanges([change]);
+        }
+
     });
-    observableObject.addDisposer(unsubscribe);
+    self.addDisposer(unsubscribe);
     subscribeRecordChanges(data.uri);
 
-    return observableObject;
+    return self;
 }
 
 module.exports = RemoteObject;
