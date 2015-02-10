@@ -12,6 +12,10 @@ function RemoteObject(data) {
     var _messageBus = new MessageBusAdapter();
     var observableObject = new ObservableObject(data);
 
+    observableObject.getDescendentObject = function(property) {
+        return RemoteObjectTraverse.getDescendentObject(observableObject, property);
+    };
+
     function sendChange(change) {
         var changes = Changes.mapObservableChange(change);
         _messageBus.sendChanges(observableObject.uri, changes);
@@ -20,7 +24,7 @@ function RemoteObject(data) {
     function receiveChanges(uri, changes) {
         _receive = true;
         changes.forEach(function(change) {
-            var descendentObject = RemoteObjectTraverse.getDescendentObject(observableObject, change.property);
+            var descendentObject = observableObject.getDescendentObject(change.property);
             change = Object.assign({}, change, {
                 property: descendentObject.property
             });
