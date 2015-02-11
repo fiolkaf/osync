@@ -29,7 +29,7 @@ function RemoteObject(data) {
             Array.prototype.push.apply(result, Changes.mapObservableChange(change));
         });
 
-        self._trigger('modified', result);
+        self._trigger('changed', result);
         _messageBus.sendChanges(self.uri, result);
     }
 
