@@ -6,6 +6,7 @@ var Observables = require('./src/observable/observables');
 module.exports = {
     RemoteObject: RemoteObject,
     ObservableObject: Observables.ObservableObject,
+    ObservableArray: Observables.ObservableArray,
     Mixin: {
         Observable: Observable,
         Disposable: Disposable
