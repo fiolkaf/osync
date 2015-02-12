@@ -20,6 +20,10 @@ function RemoteObject(data) {
         changeLog = null;
     };
 
+    self.supressChanges = function() {
+        changeLog = null;
+    };
+
     function sendChanges(changes) {
         var result = [];
         changes.forEach(function(change) {
