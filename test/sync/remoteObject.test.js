@@ -13,10 +13,10 @@ describe('RemoteObject', function() {
             remoteObject.dispose();
             expect(remoteObject, 'to be defined');
         });
-        it('throws an error if remote object does not have uri defined', function() {
+        it('does not throw an error if remote object does not have uri defined', function() {
             expect(function() {
                 new RemoteObject({});
-            }, 'to throw error');
+            }, 'not to throw error');
         });
     });
     describe('subscription spies', function() {
@@ -89,7 +89,6 @@ describe('RemoteObject', function() {
                 })]
             };
             var remoteObject = new RemoteObject(obj);
-            obj.array1[0].dispose();
             remoteObject.dispose();
             expect(unsubscribeSpy.calledTwice, 'to be true');
             _messageBusSpy.subscribe = sinon.spy(_channel.subscribe);

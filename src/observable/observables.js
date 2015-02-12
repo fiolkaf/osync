@@ -20,6 +20,7 @@ function ObservableArray(array) {
             proxy._trigger.call(this, 'change', evt);
         });
         proxy.addDisposer(unsubscribe);
+        proxy.addDisposer(observable.dispose);
         observable.addDisposer(unsubscribe);
         return observable;
     }
@@ -119,8 +120,29 @@ function ObservableObject(data) {
         }
         proxy[key] = childProxy;
         proxy.addDisposer(unsubscribe);
+        proxy.addDisposer(childProxy.dispose);
         childProxy.addDisposer(unsubscribe);
     });
+
+    var unsubscribe = proxy.on('change', function(proxyEvt) {
+        if (proxyEvt.target !== proxy) {
+            return;
+        }
+        var object = proxyEvt.value;
+        if (!object || !object.hasOwnProperty('on')) {
+            return;
+        }
+        unsubscribe = object.on('change', function(evt) {
+            evt.target = evt.target ? evt.target : object;
+            evt.key = proxyEvt.key + '.' + evt.key;
+            proxy._trigger.call(this, 'change', evt);
+        });
+        proxy.addDisposer(unsubscribe);
+        proxy.addDisposer(object.dispose);
+        object.addDisposer(unsubscribe);
+    });
+    proxy.addDisposer(unsubscribe);
+
     return proxy;
 }
 

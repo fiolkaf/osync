@@ -38,7 +38,7 @@ function getObjectsInPath(object, key) {
 function getLastUriByPath(object, key) {
     var objectsInPath = getObjectsInPath(object, key);
     var remoteObjects = objectsInPath.filter(function(item) {
-        return item.hasOwnProperty('uri');
+        return item && item.hasOwnProperty('uri');
     });
     var remoteObject = remoteObjects[remoteObjects.length - 1];
     var index = objectsInPath.indexOf(remoteObject);

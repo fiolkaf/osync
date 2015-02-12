@@ -7,10 +7,11 @@ var Observable = require('../mixin/observable');
  * @returns {Object}     Observable proxy, which triggers change events on data modification.
  */
 module.exports = function ObjectProxy(data) {
-    var proxy = {};
-    var trigger = Observable.mixin(proxy);
-    Object.getOwnPropertyNames(data).forEach(function(key) {
-        Object.defineProperty(proxy, key, {
+    var _this = {};
+    var trigger = Observable.mixin(_this);
+
+    _this.defineProperty = function(key) {
+        Object.defineProperty(_this, key, {
             enumerable: true,
             get: function() {
                 return data[key];
@@ -21,16 +22,18 @@ module.exports = function ObjectProxy(data) {
                     key: key,
                     type: 'set',
                     value: value,
-                    target: proxy
+                    target: _this
                 });
                 trigger(key + 'Change', {
                     key: key,
                     type: 'set',
                     value: value,
-                    target: proxy
+                    target: _this
                 });
             }
         });
-    });
-    return proxy;
+    };
+
+    Object.getOwnPropertyNames(data).forEach(_this.defineProperty);
+    return _this;
 };

@@ -5,15 +5,12 @@ var RemoteObjectTraverse = require('./remoteObjectTraverse');
 var ObservableObject = require('../observable/observables').ObservableObject;
 
 function RemoteObject(data) {
-    if (!data.uri) {
-        throw 'Remote object must have "uri" identifier';
-    }
     var self = new ObservableObject(data);
 
     var _receive = false;
+    var changeLog = null;
     var _messageBus = new MessageBusAdapter();
 
-    var changeLog = null;
     self.startChanges = function() {
         changeLog = [];
     };
@@ -67,7 +64,15 @@ function RemoteObject(data) {
             return;
         }
 
+        if (changeInfo.path === 'uri') {
+            subscribeRecordChanges(data.uri);
+        }
+
         if (_receive) {
+            return;
+        }
+
+        if (!self.uri) {
             return;
         }
 
@@ -78,8 +83,11 @@ function RemoteObject(data) {
         }
 
     });
+
     self.addDisposer(unsubscribe);
-    subscribeRecordChanges(data.uri);
+    if (data && data.uri) {
+        subscribeRecordChanges(data.uri);
+    }
 
     return self;
 }
