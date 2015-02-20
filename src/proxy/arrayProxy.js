@@ -12,6 +12,11 @@ module.exports = function ArrayProxy(array) {
     function redefineSetters(proxyArray) {
         Array.prototype.splice.call(proxyArray, 0); // clean the array
         array.forEach(function(value, index) {
+            if (proxyArray.hasOwnProperty(index)) {
+                Array.prototype.push.call(proxyArray, value);
+                return;
+            }
+
             Array.prototype.push.call(proxyArray, value);
             Object.defineProperty(proxyArray, index, {
                 configurable: true,
