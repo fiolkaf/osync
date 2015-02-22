@@ -1,5 +1,6 @@
 var Observable = require('../mixin/observable');
 
+
 /**
  * Creates a proxy on a array with basic modify methods.
  * [ 'pop', 'push', 'reverse', 'shift', 'unshift', 'splice', 'sort' ]
@@ -9,36 +10,21 @@ var Observable = require('../mixin/observable');
 module.exports = function ArrayProxy(array) {
     var proxyArray = array.slice(0);
     var trigger = Observable.mixin(proxyArray);
-    function redefineSetters(proxyArray) {
-        Array.prototype.splice.call(proxyArray, 0); // clean the array
-        array.forEach(function(value, index) {
-            if (proxyArray.hasOwnProperty(index)) {
-                Array.prototype.push.call(proxyArray, value);
-                return;
-            }
 
-            Array.prototype.push.call(proxyArray, value);
-            Object.defineProperty(proxyArray, index, {
-                configurable: true,
-                get: function() {
-                    return array[index];
-                },
-                set: function(value) {
-                    array[index] = value;
-                    trigger('change', {
-                        type: 'set',
-                        index: index,
-                        value: value
-                    });
-                }
-            });
+    proxyArray.set = function(index, value) {
+        array[index] = value;
+        proxyArray[index] = value;
+        trigger('change', {
+            type: 'set',
+            index: index,
+            value: value
         });
-    }
+    };
 
     function proxy(method) {
         var args = Array.prototype.slice.call(arguments, 1);
+        Array.prototype[method].apply(proxyArray, args);
         var result = Array.prototype[method].apply(array, args);
-        redefineSetters(proxyArray);
 
         trigger('change', {
             type: method,
@@ -55,6 +41,5 @@ module.exports = function ArrayProxy(array) {
             value: proxy.bind(null, method)
         });
     });
-    redefineSetters(proxyArray);
     return proxyArray;
 };

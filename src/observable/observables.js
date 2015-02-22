@@ -39,13 +39,13 @@ function ObservableArray(array) {
             case 'push':
                 evt.args.forEach(function(item, index) {
                     var itemIndex = evt.result - evt.args.length + index;
-                    array[itemIndex] = typeof item === 'object' ?
+                    proxy[itemIndex] = typeof item === 'object' ?
                         getObservableArrayObject(itemIndex, item) : array[itemIndex];
                 });
             break;
             case 'unshift':
                 evt.args.forEach(function(item, index) {
-                    array[index] = typeof item === 'object' ?
+                    proxy[index] = typeof item === 'object' ?
                         getObservableArrayObject(index, item) : array[index];
                 });
             break;
@@ -54,7 +54,7 @@ function ObservableArray(array) {
                 var inserted = Array.prototype.slice.call(evt.args, 2);
                 inserted.forEach(function(item, index) {
                     var itemIndex = index + startIndex;
-                    array[itemIndex] = typeof item === 'object' ?
+                    proxy[itemIndex] = typeof item === 'object' ?
                         getObservableArrayObject(itemIndex, item) : array[itemIndex];
                 });
                 var deleted = Array.isArray(evt.result) ? evt.result : [evt.result];

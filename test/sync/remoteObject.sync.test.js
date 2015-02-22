@@ -115,5 +115,39 @@ describe('RemoteObject', function() {
             remoteObject.dispose();
             remoteObject2.dispose();
         });
+
+        it('can synchronize reorder items', function() {
+            var remoteObject = new RemoteObject({
+                uri: 'object/1',
+                array: [
+                    { id: 1 },
+                    { id: 2 },
+                    { id: 3 },
+                    { id: 4 }
+                ]
+            });
+
+            remoteObject.array.splice(0, 1);
+            remoteObject.array.splice(0, 0, { id: 1 });
+
+
+            remoteObject.array.splice(0, 1);
+            remoteObject.array.splice(0, 0, { id: 1 });
+
+            remoteObject.array.splice(0, 1);
+            remoteObject.array.splice(0, 0, {
+                id: 1
+            });
+            remoteObject.array.splice(0, 1);
+            remoteObject.array.splice(0, 0, {
+                id: 1
+            });
+            remoteObject.array.splice(0, 1);
+            remoteObject.array.splice(0, 0, {
+                id: 1
+            });
+
+            expect(remoteObject.array[0].id, 'to equal', 1);
+        });
     });
 });
