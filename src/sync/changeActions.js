@@ -1,3 +1,5 @@
+var findIndex = require('array.prototype.findindex');
+
 module.exports = {
     set: {
         create: function(property, object) {
@@ -44,7 +46,7 @@ module.exports = {
             var getIdentifier = function(item) {
                 return item.uri ? item.uri : item;
             };
-            var index = array.findIndex(function(item) {
+            var index = findIndex(function(item) {
                 return getIdentifier(item) === getIdentifier(obj);
             });
             if (index >= 0) {

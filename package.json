@@ -1,6 +1,6 @@
 {
   "name": "osync",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "Plain Javascript object synchronization framework",
   "main": "index.js",
   "scripts": {
@@ -45,6 +45,7 @@
     "unexpected": "^5.7.1"
   },
   "dependencies": {
+    "array.prototype.findindex": "^1.0.0",
     "bussi": "^0.1.1",
     "object.assign": "^1.1.1"
   },
