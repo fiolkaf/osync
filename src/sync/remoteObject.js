@@ -3,6 +3,7 @@ var ChangeActions = require('./changeActions');
 var MessageBusAdapter = require('./messageBusAdapter');
 var RemoteObjectTraverse = require('./remoteObjectTraverse');
 var ObservableObject = require('../observable/observables').ObservableObject;
+var assign = Object.assign || require('object.assign');
 
 function RemoteObject(data) {
     var self = new ObservableObject(data);
@@ -38,7 +39,7 @@ function RemoteObject(data) {
         _receive = true;
         changes.forEach(function(change) {
             var descendentObject = RemoteObjectTraverse.getDescendentObject(self, change.property);
-            change = Object.assign({}, change, {
+            change = assign({}, change, {
                 property: descendentObject.property
             });
             switch (change.type) {
