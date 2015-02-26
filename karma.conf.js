@@ -18,6 +18,7 @@ module.exports = function(config) {
       { pattern: 'node_modules/unexpected/unexpected.js', watched: 'false', served:  'true', included: 'false' },
       { pattern: 'node_modules/bussi/**/*.js', watched: 'false', served:  'true', included: 'false' },
       'node_modules/es6-shim/es6-shim.js',
+      'node_modules/array.prototype.findindex/index.js',
       'src/**/*.js',
       'test/**/*.js'
     ],
@@ -31,6 +32,7 @@ module.exports = function(config) {
     // preprocess matching files before serving them to the browser
     // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
     preprocessors: {
+        'node_modules/array.prototype.findindex/*.js': ['commonjs'],
         'src/**/*.js': ['commonjs'],
         'test/**/*.js': ['commonjs'],
         'node_modules/es6-shim/*.js': ['commonjs'],
@@ -61,7 +63,7 @@ module.exports = function(config) {
 
     // level of logging
     // possible values: config.LOG_DISABLE || config.LOG_ERROR || config.LOG_WARN || config.LOG_INFO || config.LOG_DEBUG
-    logLevel: config.LOG_INFO,
+    logLevel: config.LOG_DEBUG,
 
 
     // enable / disable watching file and executing tests whenever any file changes

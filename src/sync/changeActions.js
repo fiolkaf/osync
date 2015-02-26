@@ -1,4 +1,4 @@
-require('array.prototype.findindex');
+var findIndex = require('array.prototype.findindex');
 
 module.exports = {
     set: {
