@@ -44,7 +44,8 @@ module.exports = {
             var array = object[change.property];
             var obj = change.object;
             var getIdentifier = function(item) {
-                return item.uri ? item.uri : item;
+                return item.uri ? item.uri :
+                       item.id ? item.id : item;
             };
             var index = array.findIndex(function(item) {
                 return getIdentifier(item) === getIdentifier(obj);
