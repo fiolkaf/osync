@@ -10,6 +10,7 @@ function RemoteObject(data) {
 
     var _receive = false;
     var changeLog = null;
+    var _messagebusSubscription = null;
     var _messageBus = new MessageBusAdapter();
 
     self.startChanges = function() {
@@ -22,7 +23,9 @@ function RemoteObject(data) {
     };
 
     self.supressChanges = function() {
+        var result = changeLog;
         changeLog = null;
+        return result;
     };
 
     function sendChanges(changes) {
@@ -45,7 +48,7 @@ function RemoteObject(data) {
             switch (change.type) {
                 case 'set':
                 case 'insert':
-                    if (change.object.uri) {
+                    if ((change.object || {}).uri) {
                         var remoteObject = new RemoteObject(change.object);
                         self.addDisposer(remoteObject.dispose);
                         change.object = remoteObject;
@@ -59,8 +62,12 @@ function RemoteObject(data) {
     }
 
     function subscribeRecordChanges(uri) {
-        var unsubscribe = _messageBus.subscribeChanges(uri, receiveChanges);
-        self.addDisposer(unsubscribe);
+        if (_messagebusSubscription) {
+            _messagebusSubscription();
+        }
+        _messagebusSubscription = _messageBus.subscribeChanges(uri, receiveChanges);
+        self.addDisposer(_messagebusSubscription);
+        return _messagebusSubscription;
     }
 
     var unsubscribe = self.on('change', function(change) {
@@ -86,7 +93,6 @@ function RemoteObject(data) {
         } else {
             sendChanges([change]);
         }
-
     });
 
     self.addDisposer(unsubscribe);
