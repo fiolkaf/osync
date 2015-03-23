@@ -35,7 +35,7 @@ function RemoteObject(data) {
         });
 
         self._trigger('changed', result);
-        _messageBus.sendChanges(self.uri, result);
+        _messageBus.sendChanges(self._uri, result);
     }
 
     function receiveChanges(uri, changes) {
@@ -48,7 +48,7 @@ function RemoteObject(data) {
             switch (change.type) {
                 case 'set':
                 case 'insert':
-                    if ((change.object || {}).uri) {
+                    if ((change.object || {})._uri) {
                         var remoteObject = new RemoteObject(change.object);
                         self.addDisposer(remoteObject.dispose);
                         change.object = remoteObject;
@@ -76,15 +76,15 @@ function RemoteObject(data) {
             return;
         }
 
-        if (changeInfo.path === 'uri') {
-            subscribeRecordChanges(data.uri);
+        if (changeInfo.path === '_uri') {
+            subscribeRecordChanges(data._uri);
         }
 
         if (_receive) {
             return;
         }
 
-        if (!self.uri) {
+        if (!self._uri) {
             return;
         }
 
@@ -96,8 +96,8 @@ function RemoteObject(data) {
     });
 
     self.addDisposer(unsubscribe);
-    if (data && data.uri) {
-        subscribeRecordChanges(data.uri);
+    if (data && data._uri) {
+        subscribeRecordChanges(data._uri);
     }
 
     return self;

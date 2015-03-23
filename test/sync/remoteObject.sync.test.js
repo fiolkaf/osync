@@ -6,12 +6,12 @@ describe('RemoteObject', function() {
     describe('synchronize objects', function() {
         it('can synchronize property', function() {
             var object1 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 property: false
             });
 
             var object2 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 property: false
             });
             object1.property = true;
@@ -22,12 +22,12 @@ describe('RemoteObject', function() {
 
         it('can synchronize array pop method', function() {
             var object1 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 array: []
             });
 
             var object2 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 array: []
             });
             object1.array.push(1);
@@ -38,14 +38,14 @@ describe('RemoteObject', function() {
 
         it('can synchronize nested array pop method', function() {
             var object1 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 object: {
                     array: []
                 }
             });
 
             var object2 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 object: {
                     array: []
                 }
@@ -58,21 +58,21 @@ describe('RemoteObject', function() {
 
         it('can synchronize inserted array items', function() {
             var object1 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 object: {
                     array: []
                 }
             });
 
             var object2 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 object: {
                     array: []
                 }
             });
 
             var newItem = new RemoteObject({
-                uri: 'object/2',
+                _uri: 'object/2',
                 property: false
             });
             object1.object.array.push(newItem);
@@ -89,7 +89,7 @@ describe('RemoteObject', function() {
 
         it('can synchronize inserted array items', function() {
             var remoteObject = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 property: false,
                 object1: {
                     array1: [{
@@ -100,7 +100,7 @@ describe('RemoteObject', function() {
             });
 
             var remoteObject2 = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 property: false,
                 object1: {
                     array1: [{
@@ -118,7 +118,7 @@ describe('RemoteObject', function() {
 
         it('can synchronize reorder items', function() {
             var remoteObject = new RemoteObject({
-                uri: 'object/1',
+                _uri: 'object/1',
                 array: [
                     { id: 1 },
                     { id: 2 },

@@ -14,7 +14,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var remoteObject = new RemoteObject({
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 property: false
             });
             remoteObject.property = true;
@@ -33,7 +33,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: {
                     property: false
                 }
@@ -55,9 +55,9 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/*', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: new RemoteObject({
-                    uri: '/remoteobject/2',
+                    _uri: '/remoteobject/2',
                     property: false
                 })
             };
@@ -83,7 +83,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -103,7 +103,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -128,9 +128,9 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/*', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: new RemoteObject({
-                    uri: '/remoteobject/2',
+                    _uri: '/remoteobject/2',
                     array: [1, 2, 3]
                 })
             };
@@ -153,7 +153,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: {
                     array: [1, 2, 3]
                 }
@@ -179,7 +179,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -200,7 +200,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -225,9 +225,9 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/2', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: new RemoteObject({
-                    uri: '/remoteobject/2',
+                    _uri: '/remoteobject/2',
                     array: [1, 2, 3]
                 })
             };
@@ -250,7 +250,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: {
                     array: [1, 2, 3]
                 }
@@ -276,7 +276,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -296,9 +296,9 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/*', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: new RemoteObject({
-                    uri: '/remoteobject/2',
+                    _uri: '/remoteobject/2',
                     array: [1, 2, 3]
                 })
             };
@@ -321,7 +321,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: {
                     array: [1, 2, 3]
                 }
@@ -346,7 +346,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -366,9 +366,9 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/*', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: new RemoteObject({
-                    uri: '/remoteobject/2',
+                    _uri: '/remoteobject/2',
                     array: [1, 2, 3]
                 })
             };
@@ -391,7 +391,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: {
                     array: [1, 2, 3]
                 }
@@ -416,7 +416,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -436,7 +436,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -455,7 +455,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3]
             };
             var remoteObject = new RemoteObject(obj);
@@ -474,7 +474,7 @@ describe('RemoteObject', function() {
             var unsubscribe = messageBusAdapter.subscribeChanges('/remoteobject/1', spy);
 
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1, 2, 3, 4]
             };
             var remoteObject = new RemoteObject(obj);

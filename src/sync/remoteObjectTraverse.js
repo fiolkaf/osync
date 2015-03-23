@@ -38,7 +38,7 @@ function getObjectsInPath(object, key) {
 function getLastUriByPath(object, key) {
     var objectsInPath = getObjectsInPath(object, key);
     var remoteObjects = objectsInPath.filter(function(item) {
-        return item && item.hasOwnProperty('uri');
+        return item && item.hasOwnProperty('_uri');
     });
     var remoteObject = remoteObjects[remoteObjects.length - 1];
     var index = objectsInPath.indexOf(remoteObject);
@@ -66,10 +66,10 @@ function getDescendentValue(object, key) {
 function getRemoteObjects(object) {
     var result = {};
     var remoteObjects = getAllObjects(object).filter(function(item) {
-        return item && item.hasOwnProperty('uri');
+        return item && item.hasOwnProperty('_uri');
     });
     remoteObjects.forEach(function(obj) {
-        result[obj.uri] = obj;
+        result[obj._uri] = obj;
     });
     return result;
 }

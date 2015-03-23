@@ -8,12 +8,12 @@ OSync provides object synchronization based on uris:
 
 ```javascript
 var object1 = new RemoteObject({
-   uri: '/remote/1',
+   _uri: '/remote/1',
    property: false
 });
 
 var object2 = new RemoteObject({
-   uri: '/remote/1',
+   _uri: '/remote/1',
    property: false
 });
 
@@ -44,10 +44,10 @@ remoteObject.object.array.splice(...);
 
 ```javascript
 var object = new RemoteObject({
-   uri: '/remote/1',
+   _uri: '/remote/1',
    property: false,
    object: new RemoteObject({
-      uri: '/remote/1',
+      _uri: '/remote/1',
       property: false
    })
 });

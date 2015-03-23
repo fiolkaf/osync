@@ -7,7 +7,7 @@ describe('RemoteObject', function() {
     describe('constructor', function() {
         it('can create a remote object', function() {
             var obj = {
-                uri: '/remoteobject/1'
+                _uri: '/remoteobject/1'
             };
             var remoteObject = new RemoteObject(obj);
             remoteObject.dispose();
@@ -39,15 +39,15 @@ describe('RemoteObject', function() {
         });
         it('subscribes to all uris defined in the object', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 obj1: new RemoteObject({
-                    uri: '/remoteobject/2'
+                    _uri: '/remoteobject/2'
                 }),
                 array1: [
                     new RemoteObject({
-                        uri: '/remoteobject/3'
+                        _uri: '/remoteobject/3'
                     }), new RemoteObject({
-                        uri: '/remoteobject/4'
+                        _uri: '/remoteobject/4'
                     })]
             };
             var remoteObject = new RemoteObject(obj);
@@ -61,7 +61,7 @@ describe('RemoteObject', function() {
         });
         it('subscribes to new element uris', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array1: []
             };
             var remoteObject = new RemoteObject(obj);
@@ -71,7 +71,7 @@ describe('RemoteObject', function() {
                 type: 'insert',
                 property: 'array1',
                 object: new RemoteObject({
-                    uri: '/remoteobject/5'
+                    _uri: '/remoteobject/5'
                 })
             }]);
             remoteObject.dispose();
@@ -83,9 +83,9 @@ describe('RemoteObject', function() {
             _messageBusSpy.subscribe = sinon.stub();
             _messageBusSpy.subscribe.returns(unsubscribeSpy);
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array1: [ new RemoteObject({
-                    uri: '/remoteobject/2'
+                    _uri: '/remoteobject/2'
                 })]
             };
             var remoteObject = new RemoteObject(obj);
@@ -98,9 +98,9 @@ describe('RemoteObject', function() {
     describe('subscription to removed items', function() {
         it('can receive changes for spliced objects', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array1: [ new RemoteObject({
-                    uri: '/remoteobject/2',
+                    _uri: '/remoteobject/2',
                     property: false
                 })]
             };
@@ -117,9 +117,9 @@ describe('RemoteObject', function() {
         });
         it('can receive changes for poped objects', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array1: [ new RemoteObject({
-                    uri: '/remoteobject/2',
+                    _uri: '/remoteobject/2',
                     property: false
                 })]
             };
@@ -136,9 +136,9 @@ describe('RemoteObject', function() {
         });
         it('can receive changes for shifted objects', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array1: [ new RemoteObject({
-                    uri: '/remoteobject/2',
+                    _uri: '/remoteobject/2',
                     property: false
                 })]
             };

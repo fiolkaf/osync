@@ -5,14 +5,14 @@ describe('RemoteObjectTraverse', function() {
     describe('getLastUriByPath', function() {
         it('returns itself if object has no structure', function() {
             var obj = {
-                uri: '/remoteobject/1'
+                _uri: '/remoteobject/1'
             };
             var result = RemoteObjectTraverse.getLastUriByPath(obj, '');
             expect(result.object, 'to be', obj);
         });
         it('returns itself if object has nested object structure without other remote objects', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object1: {
                     object12: {
                         object123: true
@@ -24,7 +24,7 @@ describe('RemoteObjectTraverse', function() {
         });
         it('returns full path if object does not have nested remote object', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object1: {
                     object12: {
                         object123: true
@@ -37,7 +37,7 @@ describe('RemoteObjectTraverse', function() {
         });
         it('returns full path if object does not have nested remote object - array version', function() {
             var obj = {
-                uri: 'object/1',
+                _uri: 'object/1',
                 property: false,
                 object1: {
                     array1: [{
@@ -53,10 +53,10 @@ describe('RemoteObjectTraverse', function() {
 
         it('gets nested object with uri', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object1: {
                     object12: {
-                        uri: '/remoteobject/2',
+                        _uri: '/remoteobject/2',
                         object123: true
                     }
                 }
@@ -67,10 +67,10 @@ describe('RemoteObjectTraverse', function() {
         });
         it('returns remote object from Array', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object1: {
                     array1: [{
-                        uri: '/remoteobject/2',
+                        _uri: '/remoteobject/2',
                         object123: true
                     }]
                 }
@@ -83,10 +83,10 @@ describe('RemoteObjectTraverse', function() {
     describe('getRemoteObjects', function() {
         it('returns all uris from nested objects', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object1: {
                     object12: {
-                        uri: '/remoteobject/2',
+                        _uri: '/remoteobject/2',
                         object123: true
                     }
                 }
@@ -98,14 +98,14 @@ describe('RemoteObjectTraverse', function() {
         });
         it('returns all uris from nested objects in arrays', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object1: {
                     array1: [{
-                        uri: '/remoteobject/2',
+                        _uri: '/remoteobject/2',
                         object123: true
                     }],
                     a_23_09rray1: [{
-                        uri: '/remoteobject/3',
+                        _uri: '/remoteobject/3',
                         object123: true
                     }]
                 }
@@ -118,14 +118,14 @@ describe('RemoteObjectTraverse', function() {
         });
         it('returns unique values', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object1: {
                     array1: [{
-                        uri: '/remoteobject/1',
+                        _uri: '/remoteobject/1',
                         object123: true
                     }],
                     a_23_09rray1: [{
-                        uri: '/remoteobject/3',
+                        _uri: '/remoteobject/3',
                         object123: true
                     }]
                 }

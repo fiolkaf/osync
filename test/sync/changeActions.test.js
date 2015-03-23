@@ -89,21 +89,21 @@ describe('ChangeActions', function() {
             it('removes object item', function() {
                 var obj = {
                     array1: [{
-                        uri: 1
+                        _uri: 1
                     }, {
-                        uri: 2
+                        _uri: 2
                     }, {
-                        uri: 3
+                        _uri: 3
                     }]
                 };
                 var change = ChangeActions.remove.create('array1', {
-                    uri: 2
+                    _uri: 2
                 });
                 ChangeActions.remove.execute(obj, change);
                 expect(obj.array1, 'to equal', [{
-                    uri: 1
+                    _uri: 1
                 }, {
-                    uri: 3
+                    _uri: 3
                 }]);
             });
             it('leaves an array untouched if cannot find a simple type item', function() {
@@ -117,21 +117,21 @@ describe('ChangeActions', function() {
             it('leaves an array untouched if cannot find object item', function() {
                 var obj = {
                     array1: [{
-                        uri: 1
+                        _uri: 1
                     }, {
-                        uri: 2
+                        _uri: 2
                     }, {
-                        uri: 3
+                        _uri: 3
                     }]
                 };
-                var change = ChangeActions.remove.create('array1', { uri: 4 });
+                var change = ChangeActions.remove.create('array1', { _uri: 4 });
                 ChangeActions.remove.execute(obj, change);
                 expect(obj.array1, 'to equal', [{
-                    uri: 1
+                    _uri: 1
                 }, {
-                    uri: 2
+                    _uri: 2
                 }, {
-                    uri: 3
+                    _uri: 3
                 }]);
             });
         });

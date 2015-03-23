@@ -7,7 +7,7 @@ describe('RemoteObject', function() {
     describe('receive message', function() {
         it('can modify object property', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 property: false
             };
             var remoteObject = new RemoteObject(obj);
@@ -21,7 +21,7 @@ describe('RemoteObject', function() {
         });
         it('can modify nested object property', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: {
                     property: false
                 }
@@ -37,7 +37,7 @@ describe('RemoteObject', function() {
         });
         it('can insert into array', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: []
             };
             var remoteObject = new RemoteObject(obj);
@@ -51,7 +51,7 @@ describe('RemoteObject', function() {
         });
         it('can insert into nested array', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 object: {
                     array: []
                 }
@@ -67,7 +67,7 @@ describe('RemoteObject', function() {
         });
         it('can remove from array', function() {
             var obj = {
-                uri: '/remoteobject/1',
+                _uri: '/remoteobject/1',
                 array: [1]
             };
             var remoteObject = new RemoteObject(obj);
