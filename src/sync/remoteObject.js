@@ -88,6 +88,7 @@ function RemoteObject(data) {
             return;
         }
 
+        change = assign({}, change);
         if (changeLog) {
             changeLog.push(change);
         } else {

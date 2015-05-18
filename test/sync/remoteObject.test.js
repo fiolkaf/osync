@@ -154,4 +154,26 @@ describe('RemoteObject', function() {
             remoteObject.dispose();
         });
     });
+    describe('start/commit changes', function() {
+        it('returns correct paths for nested object when using transactions', function(done) {
+            var obj = new RemoteObject({
+                _uri: '/remoteobject/1',
+                array1: []
+            });
+
+            obj.array1.push(new RemoteObject({
+                _uri: '/remoteobject/2',
+                property: false
+            }));
+
+            obj.array1[0].on('changed', function(changes) {
+                expect(changes[0].property, 'to equal', 'property');
+                done();
+            });
+
+            obj.startChanges();
+            obj.array1[0].property = true;
+            obj.commitChanges();
+        });
+    });
 });
